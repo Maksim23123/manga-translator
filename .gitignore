@@ -6,3 +6,4 @@ inputs/
 data/cache/
 reference/
 venv/
+api_keys.yaml

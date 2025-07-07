@@ -3,3 +3,13 @@ opencv-python
 pillow
 easyocr
 matplotlib
+
+inference[transformers]
+inference[sam]
+inference[clip]
+inference[gaze]
+inference[grounding-dino]
+inference[yolo-world]
+inference
+
+supervision
