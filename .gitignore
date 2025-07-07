@@ -2,5 +2,7 @@
 __pycache__/
 .env
 outputs/
+inputs/
 data/cache/
 reference/
+venv/
