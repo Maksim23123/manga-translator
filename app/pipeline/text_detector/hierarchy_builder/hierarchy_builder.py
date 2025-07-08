@@ -1,5 +1,5 @@
 from .box import Box
-
+from .hierarchy import Hierarchy
 
 class HierarchyBuilder:
     def __init__(self):
@@ -85,8 +85,8 @@ class HierarchyBuilder:
         return all_boxes
 
 
-    def create_final_hierarchy(self, detections, easyocr_boxes):
+    def create_final_hierarchy(self, detections, easyocr_boxes) -> Hierarchy:
         supervision_boxes = self.convert_supervision_to_boxes(detections)
         easyocr_box_data = self.convert_easyocr_to_boxes(easyocr_boxes)
         combined_boxes = supervision_boxes + easyocr_box_data
-        return self.build_hierarchy(combined_boxes)
+        return Hierarchy(self.build_hierarchy(combined_boxes))

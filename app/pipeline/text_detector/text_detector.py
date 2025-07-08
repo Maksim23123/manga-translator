@@ -1,5 +1,6 @@
 from .inference_detector import InferenceDetector
 from .hierarchy_builder.hierarchy_builder import HierarchyBuilder
+from .hierarchy_builder.hierarchy import Hierarchy
 import easyocr
 import numpy as np
 import cv2
@@ -12,7 +13,7 @@ class TextDetector:
         self._hierarchy_builder = HierarchyBuilder()
 
 
-    def get_detection_hierarchy(self, image: np.ndarray) -> dict:
+    def get_detection_hierarchy(self, image: np.ndarray) -> Hierarchy:
         detections = self._inference_detector.detect_text(image)
 
         reader = easyocr.Reader(['ja'])
@@ -23,4 +24,4 @@ class TextDetector:
             return self._hierarchy_builder.create_final_hierarchy(detections, easyocr_boxes)
         else:
             print("Error:Hierarchy building failed.")
-            return dict()
+            return Hierarchy(dict())

@@ -31,7 +31,7 @@ def main():
     # Display hierarchy for test
     #---
     import json
-    print(json.dumps(hierarchy, indent=2))
+    print(json.dumps(hierarchy.hierarchy, indent=2))
     #---
 
 
