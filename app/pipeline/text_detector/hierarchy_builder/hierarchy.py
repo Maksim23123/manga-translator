@@ -15,7 +15,7 @@ class Hierarchy:
             return self._leaf_objects
         else:
             self._leaf_objects = self._collect_leaf_objects(self._hierarchy)
-    
+            return self._leaf_objects
 
     @property
     def leaf_deepest_boxes(self):

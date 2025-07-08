@@ -13,3 +13,4 @@ inference[yolo-world]
 inference
 
 supervision
+manga-ocr

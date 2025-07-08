@@ -3,6 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import cv2
 from text_detector.text_detector import TextDetector
+from text_extractor import TextExtractor
 
 def main():
     file_name = "p (1)"
@@ -34,6 +35,11 @@ def main():
     print(json.dumps(hierarchy.hierarchy, indent=2))
     #---
 
+    text_extractor = TextExtractor()
+
+    extracted_text = text_extractor.extract_text(original_image.copy(), hierarchy)
+
+    print(extracted_text)
 
 
 if __name__ == '__main__':
