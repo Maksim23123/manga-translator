@@ -14,3 +14,4 @@ inference
 
 supervision
 manga-ocr
+together
