@@ -10,7 +10,7 @@ class Hierarchy:
     
 
     @property
-    def leaf_objects(self):
+    def text_chanks(self):
         if self._leaf_objects:
             return self._leaf_objects
         else:
@@ -18,8 +18,8 @@ class Hierarchy:
             return self._leaf_objects
 
     @property
-    def leaf_deepest_boxes(self):
-        return self.extract_deepest_bboxes(self.leaf_objects)
+    def chanks_deepest_boxes(self):
+        return self.extract_deepest_bboxes(self.text_chanks)
 
 
     def _collect_leaf_objects(self, hierarchy):

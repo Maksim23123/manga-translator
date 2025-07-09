@@ -34,7 +34,7 @@ def main():
 
     inpainter = Inpainter()
 
-    inpainted_image = inpainter.inpaint_bboxes(original_image.copy(), hierarchy.leaf_deepest_boxes)
+    inpainted_image = inpainter.inpaint_bboxes(original_image.copy(), hierarchy.chanks_deepest_boxes)
 
     text_inserter = TextInserter()
 

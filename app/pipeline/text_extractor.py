@@ -40,4 +40,4 @@ class TextExtractor:
     
 
     def extract_text(self, image: np.ndarray, hierarchy) -> dict:
-        return self._extract_text_from_leafs(image, hierarchy.leaf_objects)
+        return self._extract_text_from_leafs(image, hierarchy.text_chanks)
