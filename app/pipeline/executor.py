@@ -1,15 +1,15 @@
-from image_importer import ImageImporter
+from .image_importer import ImageImporter
 import os
 import matplotlib.pyplot as plt
 import cv2
-from text_detector.text_detector import TextDetector
-from text_extractor import TextExtractor
-from translator import Translator
-from inpainter import Inpainter
-from text_inserter import TextInserter
+from .text_detector.text_detector import TextDetector
+from .text_extractor import TextExtractor
+from .translator import Translator
+from .inpainter import Inpainter
+from .text_inserter import TextInserter
 
 
-def main():
+def execute_pipline():
     file_name = "p (3)"
     file_ext = "jpg"
     input_folder_path = "app/data/inputs"
@@ -26,7 +26,13 @@ def main():
 
     text_extractor = TextExtractor()
 
-    extracted_text = text_extractor.extract_text(original_image.copy(), hierarchy)
+    text_areas, original_text = text_extractor.extract_text(original_image.copy()
+                                                            , hierarchy.text_chunks)
+
+    print(text_areas)
+    print(original_text)
+    
+    return# temp
 
     translator = Translator()
 
@@ -34,7 +40,7 @@ def main():
 
     inpainter = Inpainter()
 
-    inpainted_image = inpainter.inpaint_bboxes(original_image.copy(), hierarchy.chanks_deepest_boxes)
+    inpainted_image = inpainter.inpaint_bboxes(original_image.copy(), hierarchy.chunks_deepest_boxes)
 
     text_inserter = TextInserter()
 
@@ -48,8 +54,3 @@ def main():
     plt.axis("off")
     plt.show()
     #---
-
-    
-
-if __name__ == '__main__':
-    main()

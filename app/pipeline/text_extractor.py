@@ -7,11 +7,12 @@ class TextExtractor:
         pass
 
 
-    def _extract_text_from_leafs(self, image_np, leaf_objects):
-        text_data = []
+    def extract_text(self, image_np: np.ndarray, text_chunks) -> tuple[list[dict], list[str]]:
+        bbox_list = []
+        original_text_list = []
         mocr = MangaOcr()
 
-        for obj in leaf_objects:
+        for obj in text_chunks:
             x_min, y_min, x_max, y_max = obj["bbox"]
 
             # Crop from the original image
@@ -25,19 +26,7 @@ class TextExtractor:
             # Run OCR
             ocr_text = mocr(crop_pil)
 
-            # Create result entry
-            text_entry = {
-                "parent_bbox": obj["parent_bbox"],
-                "bbox": obj["bbox"],
-                "translation": {
-                    "original": ocr_text,
-                    "translation": ""
-                }
-            }
-            text_data.append(text_entry)
+            bbox_list.append(obj["bbox"])
+            original_text_list.append(ocr_text)
 
-        return text_data
-    
-
-    def extract_text(self, image: np.ndarray, hierarchy) -> dict:
-        return self._extract_text_from_leafs(image, hierarchy.text_chanks)
+        return bbox_list, original_text_list
