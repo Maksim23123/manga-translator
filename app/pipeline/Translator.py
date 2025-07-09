@@ -42,26 +42,29 @@ Your task is to return the same array of objects, but with an added field:
         except:
             print("Error:Together client initialization failed")
 
-    def _prepare_batch_for_translation(self, text_results):
+
+    def _prepare_batch_for_translation(self, text_list):
         return [
-            {"id": idx, "original": entry["translation"]["original"]}
-            for idx, entry in enumerate(text_results)
-            if entry["translation"]["original"].strip()
+            {"id": idx, "original": entry}
+            for idx, entry in enumerate(text_list)
+            if entry.strip()
         ]
 
 
-    def _merge_translations(self, text_results, translated_batch):
-        text_results = text_results.copy()
-        id_to_translation = {entry["id"]: entry["translation"] for entry in translated_batch}
-        for idx, entry in enumerate(text_results):
-            if idx in id_to_translation:
-                entry["translation"]["translation"] = id_to_translation[idx]
-        return text_results
+    def _batch_to_list(self, translated_batch, desired_size: int):
+        new_list = ["" for _ in range(desired_size)]
+
+        for i, _ in enumerate(translated_batch):
+            index = translated_batch[i]["id"]
+            element = translated_batch[i]["original"]
+            if index < len(new_list):
+                new_list[index] = element
+
+        return new_list
 
 
-    
-    def translate_batch(self, text_batch):
-        batch = self._prepare_batch_for_translation(text_batch)
+    def translate_text_list(self, text_list):
+        batch = self._prepare_batch_for_translation(text_list)
         user_prompt = json.dumps(batch, ensure_ascii=False, indent=2)
 
         response = self._client.chat.completions.create(
@@ -73,5 +76,5 @@ Your task is to return the same array of objects, but with an added field:
 
         translated_batch = json.loads(raw_response_text)
 
-        return self._merge_translations(text_batch, translated_batch)
+        return self._batch_to_list(translated_batch, len(text_list))
 

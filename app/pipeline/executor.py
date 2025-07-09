@@ -29,14 +29,21 @@ def execute_pipline():
     text_areas, original_text = text_extractor.extract_text(original_image.copy()
                                                             , hierarchy.text_chunks)
 
-    print(text_areas)
-    print(original_text)
-    
-    return# temp
-
     translator = Translator()
 
-    translation_map = translator.translate_batch(extracted_text)
+    translated_text = translator.translate_text_list(original_text)
+
+    # Display translated text
+    # ---
+    print(translated_text)
+    # ---
+    
+    # Display both original and translated text lenght
+    # --- 
+    print("Original text list length:", len(original_text), "; Translated text list lenght:", len(translated_text))
+    # ---
+
+    return # temp
 
     inpainter = Inpainter()
 
