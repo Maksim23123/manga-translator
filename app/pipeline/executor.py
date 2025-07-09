@@ -10,7 +10,7 @@ from .text_inserter import TextInserter
 
 
 def execute_pipline():
-    file_name = "p (3)"
+    file_name = "p (2)"
     file_ext = "jpg"
     input_folder_path = "app/data/inputs"
     image_path = os.path.join(input_folder_path, f"{file_name}.{file_ext}")
@@ -33,17 +33,7 @@ def execute_pipline():
 
     translated_text = translator.translate_text_list(original_text)
 
-    # Display translated text
-    # ---
     print(translated_text)
-    # ---
-    
-    # Display both original and translated text lenght
-    # --- 
-    print("Original text list length:", len(original_text), "; Translated text list lenght:", len(translated_text))
-    # ---
-
-    return # temp
 
     inpainter = Inpainter()
 
@@ -51,7 +41,7 @@ def execute_pipline():
 
     text_inserter = TextInserter()
 
-    final_image = text_inserter.insert_text_into_image(inpainted_image, translation_map)
+    final_image = text_inserter.insert_text_into_image(inpainted_image, text_areas, translated_text)
     
     # Display inpainted image for test
     #---

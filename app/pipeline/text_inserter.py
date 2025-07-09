@@ -14,26 +14,8 @@ class TextInserter:
         
 
 
-    def insert_text_into_image(self, image, text_results):
+    def insert_text_into_image(self, image, text_areas, text_list):
         image_with_text = image.copy()
-
-        def compute_zone(text_node, expansion_ratio=0.8):
-            if text_node['parent_bbox'] is not None:
-                nx_min, ny_min, nx_max, ny_max = text_node['bbox']
-                px_min, py_min, px_max, py_max = text_node['parent_bbox']
-                x_center = (nx_min + nx_max) / 2
-                y_center = (ny_min + ny_max) / 2
-
-                x_exp = min(abs(x_center - px_min), abs(x_center - px_max)) * expansion_ratio
-                y_exp = min(abs(y_center - py_min), abs(y_center - py_max)) * expansion_ratio
-
-                return [
-                    int(x_center - x_exp),
-                    int(y_center - y_exp),
-                    int(x_center + x_exp),
-                    int(y_center + y_exp)
-                ]
-            return text_node['bbox']
 
         def zones_intersect(a, b):
             ax1, ay1, ax2, ay2 = a
@@ -116,14 +98,13 @@ class TextInserter:
                 cv2.putText(img, line, (text_start_x, y), font, font_scale, color, thickness, lineType=cv2.LINE_AA)
 
         # Step 1: Get and resolve text zones
-        raw_zones = [compute_zone(node) for node in text_results]
-        non_overlapping_zones = resolve_overlaps(raw_zones)
+        non_overlapping_zones = resolve_overlaps(text_areas)
 
         # Step 2: Draw text in zones
         base_image = np.zeros_like(image_with_text)
-        for i, node in enumerate(text_results):
+        for i, text in enumerate(text_list):
             zone = non_overlapping_zones[i]
-            text = node["translation"]["translation"]
+            text = text
             draw_wrapped_text_in_zone(base_image
                                       , text, zone, self.font, base_scale=self.base_font_scale
                                       , color=self.color, thickness=self.thickness)

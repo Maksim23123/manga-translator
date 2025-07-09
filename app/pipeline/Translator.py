@@ -56,7 +56,7 @@ Your task is to return the same array of objects, but with an added field:
 
         for i, _ in enumerate(translated_batch):
             index = translated_batch[i]["id"]
-            element = translated_batch[i]["original"]
+            element = translated_batch[i]["translation"]
             if index < len(new_list):
                 new_list[index] = element
 
