@@ -1,5 +1,7 @@
+from pipeline.executor import execute_pipline
+
 def main():
-    print('Run GUI or CLI here')
+    execute_pipline()
 
 if __name__ == '__main__':
     main()
