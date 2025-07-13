@@ -1,9 +1,12 @@
-from gui.main_gui import run_gui
+from gui.gui import GUI
 from core.core import Core
+from controller.controller import Contorller
 
 def main():
     core = Core()
-    run_gui()
+    controller = Contorller(core)
+    gui = GUI(controller)
+
 
 if __name__ == '__main__':
     main()

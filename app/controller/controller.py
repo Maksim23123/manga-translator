@@ -1,5 +1,6 @@
-from ..core.core import Core
+from core.core import Core
 
 class Contorller:
     def __init__(self, core: Core):
         self.core = core
+        print("Manga Translator controller initialized.")
