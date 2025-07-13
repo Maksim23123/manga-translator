@@ -1,7 +1,7 @@
-from pipeline.executor import execute_pipline
+from gui.main_gui import run_gui
 
 def main():
-    execute_pipline()
+    run_gui()
 
 if __name__ == '__main__':
     main()
