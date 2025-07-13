@@ -5,8 +5,9 @@ import os
 
 def main():
     core = Core()
-    controller = Contorller(core)
-    gui = GUI(core, controller)
+    gui = GUI(core)
+    controller = Contorller(core, gui)
+    gui.show()
 
 
 if __name__ == '__main__':

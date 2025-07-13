@@ -51,12 +51,16 @@ class ProjectWindow(QMainWindow):
 
     def _init_menu_bar(self):
         self.menu_bar = self.menuBar()
-
+        
         file_menu = self.menu_bar.addMenu("File")
-        open_project_action = QAction("Open project", self)
-        new_project_action = QAction("New project", self)
-        file_menu.addAction(open_project_action)
-        file_menu.addAction(new_project_action)
+        
+        self.file_menu_actions = {
+            "open_project": QAction("Open project", self),
+            "new_project": QAction("New project", self)
+        }
+        
+        for action in self.file_menu_actions.values():
+            file_menu.addAction(action)
 
 
     def _add_tab(self, index):

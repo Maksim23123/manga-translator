@@ -18,7 +18,7 @@ class ProjectManager(QObject):
 
     def _init_projects_folder_path(self):
         root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-        self._base_path = os.path.join(root_path, self.DEFAULT_PROJECTS_DIR_PATH)
+        self.base_path = os.path.join(root_path, self.DEFAULT_PROJECTS_DIR_PATH)
 
 
     def create_new_project(self, project_name, open=True):
