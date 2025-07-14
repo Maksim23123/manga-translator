@@ -5,6 +5,6 @@ from .event_bus import EventBus
 class Core:
     def __init__(self):
         self.event_bus = EventBus()
-        self.cache_manager = CacheManager()
-        self.project_manager = ProjectManager(self.event_bus)
+        self.cache_manager = CacheManager(self.event_bus)
+        self.project_manager = ProjectManager(self.event_bus, self.cache_manager)
         print("Manga Translator core initialized.")
