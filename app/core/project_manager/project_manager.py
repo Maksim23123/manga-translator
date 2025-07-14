@@ -21,10 +21,13 @@ class ProjectManager(QObject):
         self.base_path = os.path.join(root_path, self.DEFAULT_PROJECTS_DIR_PATH)
 
 
-    def create_new_project(self, project_name, open=True):
+    def create_new_project(self, project_name, project_location=None, open_new_project=True):
 
-        project_path = os.path.join(self.base_path, project_name)
-        
+        if project_location:
+            project_path = os.path.join(project_location, project_name)
+        else:
+            project_path = os.path.join(self.base_path, project_name)
+
         if os.path.exists(project_path):
             raise FileExistsError(f"Project folder '{project_path}' already exists.")
         
@@ -40,7 +43,7 @@ class ProjectManager(QObject):
             json.dump(metadata, f, indent=4)
 
         print(f"Project '{project_name}' created at {project_path}")
-        if open: self.open_project(project_path)
+        if open_new_project: self.open_project(project_path)
         return project_path
     
 
