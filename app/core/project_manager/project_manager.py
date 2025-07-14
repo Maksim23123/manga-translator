@@ -3,24 +3,25 @@ import json
 from datetime import datetime
 from .project import Project
 from ..event_bus import EventBus
-from ..cache_manager.cache_manager import CacheManager 
+from ..cache_manager.cache_manager import CacheManager
+from ..context import Context 
 
 
 class ProjectManager:
 
     DEFAULT_PROJECTS_DIR_PATH = "data\\projects"
-
-    def __init__(self, event_bus: EventBus, cache_manager: CacheManager):
+    
+    def __init__(self, event_bus: EventBus, context: Context):
         super().__init__()
         self.event_bus = event_bus
-        self.cache_manager = cache_manager
+        self.context = context
         self.active_project = None
         self._init_projects_folder_path()
         self.open_last_project()
     
 
     def open_last_project(self):
-        last_project_path = self.cache_manager.user_preferences.get_last_project()
+        last_project_path = self.context.active_project_directory
 
         if last_project_path:
             self.open_project(last_project_path)
@@ -67,6 +68,7 @@ class ProjectManager:
 
         if project_data:
             self.active_project = Project(project_data)
+            self.context.active_project_directory = project_path
             self.event_bus.activeProjectChanged.emit(project_path)
             return True
         return False
