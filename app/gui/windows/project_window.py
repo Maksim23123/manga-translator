@@ -22,7 +22,7 @@ class ProjectWindow(QMainWindow):
 
     
     def _init_window_settings(self):
-        self.core.project_manager.active_project_changed.connect(self._update_window_name)
+        self.core.event_bus.activeProjectChanged.connect(self._update_window_name)
         self._update_window_name()
 
         self.resize(1000, 700)

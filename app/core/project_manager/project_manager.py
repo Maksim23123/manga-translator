@@ -2,16 +2,16 @@ import os
 import json
 from datetime import datetime
 from .project import Project
-from PySide6.QtCore import QObject, Signal
+from ..event_bus import EventBus
 
-class ProjectManager(QObject):
+
+class ProjectManager:
 
     DEFAULT_PROJECTS_DIR_PATH = "data\\projects"
 
-    active_project_changed = Signal()
-
-    def __init__(self):
+    def __init__(self, event_bus: EventBus):
         super().__init__()
+        self.event_bus = event_bus
         self._init_projects_folder_path()
         self.active_project = None
 
@@ -57,6 +57,6 @@ class ProjectManager(QObject):
 
         if project_data:
             self.active_project = Project(project_data)
-            self.active_project_changed.emit()
+            self.event_bus.activeProjectChanged.emit(project_path)
             return True
         return False

@@ -6,5 +6,5 @@ class Core:
     def __init__(self):
         self.event_bus = EventBus()
         self.cache_manager = CacheManager()
-        self.project_manager = ProjectManager()
+        self.project_manager = ProjectManager(self.event_bus)
         print("Manga Translator core initialized.")
