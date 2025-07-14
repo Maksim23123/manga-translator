@@ -45,8 +45,7 @@ class ProjectWindow(QMainWindow):
         self.tabs = QTabWidget()
         self.setCentralWidget(self.tabs)
 
-        for i in range(2):  # Create 2 tabs for demonstration
-            self._add_tab(i)
+        self._add_tab()
     
 
     def _init_menu_bar(self):
@@ -63,12 +62,12 @@ class ProjectWindow(QMainWindow):
             file_menu.addAction(action)
 
 
-    def _add_tab(self, index):
-        sub_main_window = SubMainWindow(index)
+    def _add_tab(self):
+        sub_main_window = SubMainWindow(1)
 
         # Wrap sub-main-window in a QWidget for tab embedding
         container = QWidget()
         layout = QVBoxLayout(container)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(sub_main_window)
-        self.tabs.addTab(container, f"Tab {index}")
+        self.tabs.addTab(container, f"Manga Composer")
