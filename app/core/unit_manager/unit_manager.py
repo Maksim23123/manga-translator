@@ -15,7 +15,9 @@ class UnitManager:
         self.context = context
         self.active_unit = None
         self._init_units_folder_path()
+        self._connect_to_events()
 
+# Initialization
 
     def _init_units_folder_path(self):
         root_path = self.context.active_project_directory
@@ -23,6 +25,7 @@ class UnitManager:
             self.base_path = os.path.join(root_path, self.DEFAULT_UNITS_DIR_PATH)
             os.makedirs(self.base_path, exist_ok=True)
 
+# Unit creation
 
     def create_new_unit(self, unit_name, set_new_active=True):
 
@@ -43,11 +46,12 @@ class UnitManager:
             json.dump(metadata, f, indent=4)
 
         print(f"Unit '{unit_name}' created at {unit_path}")
-        if set_new_active: self.load_unit(unit_path)
+        if set_new_active: self.active_unit = self.load_unit(unit_path)
         return unit_path
     
+# Unit loading
 
-    def load_unit(self, unit_path) -> bool:
+    def load_unit(self, unit_path) -> Unit:
         meta_file = os.path.join(unit_path, "unit.json")
 
         if not os.path.exists(meta_file):
@@ -55,7 +59,20 @@ class UnitManager:
         with open(meta_file, "r", encoding="utf-8") as f:
             unit_data = json.load(f)
 
-        if unit_data:
-            self.active_unit = Unit(unit_data)
-            return True
-        return False
+        return Unit(unit_data)
+
+# Composing unit list
+
+    def is_unit(self, path):
+        meta_file = os.path.join(path, "unit.json")
+
+        if not os.path.exists(meta_file): return False
+        return True
+    
+
+    def get_unit_list(self):
+        return [self.load_unit(f.path) for f in os.scandir(self.base_path) if f.is_dir() and self.is_unit(f.path)]
+
+
+    def _connect_to_events(self):
+        self.event_bus.activeProjectChanged.connect(self._init_units_folder_path)

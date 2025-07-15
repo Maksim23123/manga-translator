@@ -7,6 +7,7 @@ from PySide6.QtGui import QAction
 import sys
 from ..tabs.sub_main_window import SubMainWindow
 from core.core import Core
+from ..tabs.unit_composer.unit_composer import UnitComposer
 
 class ProjectWindow(QMainWindow):
     WINDOW_NAME_PREFIX = "Manga Translator"
@@ -45,7 +46,7 @@ class ProjectWindow(QMainWindow):
         self.tabs = QTabWidget()
         self.setCentralWidget(self.tabs)
 
-        self._add_tab()
+        self._add_tabs()
     
 
     def _init_menu_bar(self):
@@ -62,12 +63,12 @@ class ProjectWindow(QMainWindow):
             file_menu.addAction(action)
 
 
-    def _add_tab(self):
-        sub_main_window = SubMainWindow(1)
+    def _add_tabs(self):
+        self.unit_composer = UnitComposer(self.core)
 
         # Wrap sub-main-window in a QWidget for tab embedding
         container = QWidget()
         layout = QVBoxLayout(container)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(sub_main_window)
+        layout.addWidget(self.unit_composer)
         self.tabs.addTab(container, f"Manga Composer")
