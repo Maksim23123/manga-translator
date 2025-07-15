@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'unitListItemaGpcSc.ui'
+## Form generated from reading UI file 'unitListItemFDVNbP.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.1
 ##
@@ -32,6 +32,11 @@ class Ui_UnitListItem(object):
 
         self.horizontalLayout.addWidget(self.unitNameLabel)
 
+        self.isActiveLabel = QLabel(UnitListItem)
+        self.isActiveLabel.setObjectName(u"isActiveLabel")
+
+        self.horizontalLayout.addWidget(self.isActiveLabel)
+
         self.deleteUnitPushButton = QPushButton(UnitListItem)
         self.deleteUnitPushButton.setObjectName(u"deleteUnitPushButton")
 
@@ -49,6 +54,7 @@ class Ui_UnitListItem(object):
     def retranslateUi(self, UnitListItem):
         UnitListItem.setWindowTitle(QCoreApplication.translate("UnitListItem", u"Form", None))
         self.unitNameLabel.setText(QCoreApplication.translate("UnitListItem", u"[unit name label]", None))
+        self.isActiveLabel.setText("")
         self.deleteUnitPushButton.setText(QCoreApplication.translate("UnitListItem", u"Delete", None))
     # retranslateUi
 

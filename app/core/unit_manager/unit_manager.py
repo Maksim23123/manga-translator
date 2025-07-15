@@ -47,6 +47,9 @@ class UnitManager:
 
         print(f"Unit '{unit_name}' created at {unit_path}")
         if set_new_active: self.active_unit = self.load_unit(unit_path)
+
+        self.event_bus.units_updated.emit()
+
         return unit_path
     
 # Unit loading
@@ -71,7 +74,16 @@ class UnitManager:
     
 
     def get_unit_list(self):
-        return [self.load_unit(f.path) for f in os.scandir(self.base_path) if f.is_dir() and self.is_unit(f.path)]
+        units = [
+            f for f in os.scandir(self.base_path)
+            if f.is_dir() and self.is_unit(f.path)
+        ]
+
+        # Sort by creation time (newest first or oldest first)
+        # units.sort(key=lambda f: f.stat().st_birthtime)  # ⬅️ Oldest to newest
+        units.sort(key=lambda f: f.stat().st_birthtime, reverse=True)  # ⬅️ Newest to oldest
+
+        return [self.load_unit(f.path) for f in units]
 
 
     def _connect_to_events(self):
