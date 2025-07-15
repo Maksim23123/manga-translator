@@ -4,6 +4,8 @@ import os
 import json
 from datetime import datetime
 from .unit import Unit
+import shutil
+
 
 class UnitManager:
 
@@ -48,7 +50,7 @@ class UnitManager:
         print(f"Unit '{unit_name}' created at {unit_path}")
         if set_new_active: self.active_unit = self.load_unit(unit_path)
 
-        self.event_bus.units_updated.emit()
+        self.event_bus.unitsUpdated.emit()
 
         return unit_path
     
@@ -62,7 +64,7 @@ class UnitManager:
         with open(meta_file, "r", encoding="utf-8") as f:
             unit_data = json.load(f)
 
-        return Unit(unit_data)
+        return Unit(unit_data, unit_path)
 
 # Composing unit list
 
@@ -84,6 +86,14 @@ class UnitManager:
         units.sort(key=lambda f: f.stat().st_birthtime, reverse=True)  # ⬅️ Newest to oldest
 
         return [self.load_unit(f.path) for f in units]
+
+# Unit removal
+
+    def delete_unit(self, unit_path: str) -> bool:
+        if self.is_unit(unit_path):
+            if self.active_unit and self.active_unit.unit_path == unit_path: self.active_unit = None
+            shutil.rmtree(unit_path)
+            self.event_bus.unitsUpdated.emit()
 
 
     def _connect_to_events(self):

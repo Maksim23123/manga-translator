@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QFileDialog, QMessageBox
-from gui.tabs.unit_composer.unit_creation_dialog import UnitCreationDialog
+from gui.tabs.unit_composer.unit_list.unit_creation_dialog import UnitCreationDialog
 from core.unit_manager.unit_manager import UnitManager
 import re
 import os
@@ -18,16 +18,16 @@ class NewUnitDialogController:
     
 
     def _connect_controller(self):
-        self.unit_creation_dialog.dialog_button_box.accepted.connect(self.dialog_button_box_accepted)
+        self.unit_creation_dialog.dialog_button_box.accepted.connect(self._dialog_button_box_accepted)
         self.unit_creation_dialog.dialog_button_box.rejected.connect(self.unit_creation_dialog.reject)
 
    
 
-    def dialog_button_box_accepted(self):
+    def _dialog_button_box_accepted(self):
         unit_name = self.unit_creation_dialog.unit_name
 
         if not self.is_valid_unit_name(unit_name):
-            self.show_warning("Invalid Project Name", "Project name cannot be empty or contain illegal characters.")
+            self.show_warning("Invalid Manga Name", "Manga name cannot be empty or contain illegal characters.")
             return
         
         self.unit_manager.create_new_unit(unit_name)
