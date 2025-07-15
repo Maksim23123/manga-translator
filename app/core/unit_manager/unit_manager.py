@@ -48,6 +48,7 @@ class UnitManager:
         metadata = {
             "unit_name": unit_name,
             "created_at": datetime.now().isoformat(),
+            "hierarchy": None
         }
 
         meta_file = os.path.join(unit_path, "unit.json")
@@ -125,8 +126,25 @@ class UnitManager:
             # Copy the image
             shutil.copy2(image_path, target_path)
 
+            self.active_unit.hierarchy_root.add_image(remove_extension(filename), target_path)
+            self._update_active_init_metadata()
+
             print(f"Imported image to {target_path}")
             return target_path  # Optional: return for tracking
 
+
+# Editing meta
+
+    def _update_active_init_metadata(self):
+        if self.active_unit:
+            unit_path = self.active_unit.unit_path
+            meta_file = os.path.join(unit_path, "unit.json")
+            with open(meta_file, "w", encoding="utf-8") as f:
+                json.dump(self.active_unit.to_metadata(), f, indent=4)
+
     def _connect_to_events(self):
         self.event_bus.activeProjectChanged.connect(self._init_units_folder_path)
+
+
+def remove_extension(filename: str) -> str:
+    return os.path.splitext(filename)[0]
