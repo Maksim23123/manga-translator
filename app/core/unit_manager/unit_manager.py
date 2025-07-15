@@ -10,6 +10,7 @@ import shutil
 class UnitManager:
 
     DEFAULT_UNITS_DIR_PATH = "units"
+    ORIGINAL_IMAGES_DIR_PATH = "original"
 
     def __init__(self, event_bus: EventBus, context: Context):
         super().__init__()
@@ -20,6 +21,12 @@ class UnitManager:
         self._connect_to_events()
 
 # Initialization
+
+    def _init_original_folder_path(self):
+        if self.base_path and os.path.exists(self.base_path):
+            self.base_path = os.path.join(self.base_path, self.ORIGINAL_IMAGES_DIR_PATH)
+            os.makedirs(self.base_path, exist_ok=True)
+        
 
     def _init_units_folder_path(self):
         root_path = self.context.active_project_directory
@@ -95,6 +102,31 @@ class UnitManager:
             shutil.rmtree(unit_path)
             self.event_bus.unitsUpdated.emit()
 
+# import image
+
+    def get_original_folder_path(self):
+        if self.active_unit and os.path.exists(self.active_unit.unit_path):
+            return os.path.join(self.active_unit.unit_path, self.ORIGINAL_IMAGES_DIR_PATH)
+
+
+    def import_image(self, image_path):
+        target_folder_path = self.get_original_folder_path()
+
+        if target_folder_path:
+            # Ensure target folder exists
+            os.makedirs(target_folder_path, exist_ok=True)
+
+            # Get the image filename
+            filename = os.path.basename(image_path)
+
+            # Compute full destination path
+            target_path = os.path.join(target_folder_path, filename)
+
+            # Copy the image
+            shutil.copy2(image_path, target_path)
+
+            print(f"Imported image to {target_path}")
+            return target_path  # Optional: return for tracking
 
     def _connect_to_events(self):
         self.event_bus.activeProjectChanged.connect(self._init_units_folder_path)

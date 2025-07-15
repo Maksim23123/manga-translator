@@ -1,3 +1,4 @@
+from PySide6.QtWidgets import QFileDialog
 from core.core import Core
 from gui.tabs.unit_composer.unit_composer import UnitComposer
 from .unit_list.new_unit_dialog_contorller import NewUnitDialogController
@@ -19,6 +20,7 @@ class UnitComposerController:
     def _connect_controller(self):
         self.unit_composer.new_unit_button.clicked.connect(self._new_unit_on_click)
         self.unit_composer.unit_list_updated.connect(self._update_unit_item_controller_list)
+        self.unit_composer.import_image_button.clicked.connect(self._import_image_on_click)
 
 
     def _update_unit_item_controller_list(self):
@@ -33,3 +35,17 @@ class UnitComposerController:
         unit_creation_dialog = UnitCreationDialog()
         controller = NewUnitDialogController(unit_creation_dialog, self.core.unit_manager)
         unit_creation_dialog.exec()
+
+    
+    def _import_image_on_click(self):
+        file_paths, _ = QFileDialog.getOpenFileNames(
+            parent=self.unit_composer,
+            caption="Import Images",
+            filter="Images (*.png *.jpg *.jpeg *.webp *.bmp)"
+        )
+
+        if not file_paths:
+            return  # User cancelled
+
+        for path in file_paths:
+            self.core.unit_manager.import_image(path) 

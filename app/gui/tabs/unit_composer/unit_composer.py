@@ -29,6 +29,7 @@ class UnitComposer(QMainWindow, QObject):
 
         self.unit_listWidget = self.ui.unitListWidget
         self.new_unit_button = self.ui.newUnitButton
+        self.import_image_button = self.ui.importFilesPushButton
     
 
     def _connect_to_events(self):
