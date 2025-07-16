@@ -10,7 +10,7 @@ class UnitListItem(QWidget):
         self._setup_ui()
 
         self.unit_name_label.setText(self.unit.unit_name)
-        self._set_activity_status(is_active)
+        self.set_activity_status(is_active)
     
 
     def _setup_ui(self):
@@ -22,6 +22,6 @@ class UnitListItem(QWidget):
         self.delete_button = self.ui.deleteUnitPushButton
     
 
-    def _set_activity_status(self, is_acitve):
+    def set_activity_status(self, is_acitve):
         if is_acitve: self.is_active_Lable.setText("active")
         else: self.is_active_Lable.setText("")

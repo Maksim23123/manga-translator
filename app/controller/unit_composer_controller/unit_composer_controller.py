@@ -21,6 +21,7 @@ class UnitComposerController:
         self.unit_composer.new_unit_button.clicked.connect(self._new_unit_on_click)
         self.unit_composer.unit_list_updated.connect(self._update_unit_item_controller_list)
         self.unit_composer.import_image_button.clicked.connect(self._import_image_on_click)
+        self.unit_composer.unit_listWidget.itemSelectionChanged.connect(self._unit_list_on_selection_changed)
 
 
     def _update_unit_item_controller_list(self):
@@ -48,4 +49,16 @@ class UnitComposerController:
             return  # User cancelled
 
         for path in file_paths:
-            self.core.unit_manager.import_image(path) 
+            self.core.unit_manager.import_image(path)
+    
+
+    def _unit_list_on_selection_changed(self):
+        selected_items = self.unit_composer.unit_listWidget.selectedItems()
+        if selected_items:
+            item = selected_items[0]
+            widget = self.unit_composer.unit_listWidget.itemWidget(item)
+            if widget:
+                print(f"Newly selected unit: {widget.unit.unit_name}")
+                # Example: set as active unit
+                self.core.unit_manager.set_active(widget.unit) 
+        

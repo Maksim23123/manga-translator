@@ -16,17 +16,11 @@ class UnitManager:
         super().__init__()
         self.event_bus = event_bus
         self.context = context
-        self.active_unit = None
+        self.active_unit = None #TODO: Make active item private
         self._init_units_folder_path()
         self._connect_to_events()
 
 # Initialization
-
-    def _init_original_folder_path(self):
-        if self.base_path and os.path.exists(self.base_path):
-            self.base_path = os.path.join(self.base_path, self.ORIGINAL_IMAGES_DIR_PATH)
-            os.makedirs(self.base_path, exist_ok=True)
-        
 
     def _init_units_folder_path(self):
         root_path = self.context.active_project_directory
@@ -73,6 +67,14 @@ class UnitManager:
             unit_data = json.load(f)
 
         return Unit(unit_data, unit_path)
+    
+
+    def set_active(self, unit: Unit):
+        if unit:
+            self._update_active_init_metadata()
+            self.active_unit = unit
+            self.event_bus.activeUnitChanged.emit()
+
 
 # Composing unit list
 
@@ -128,13 +130,14 @@ class UnitManager:
 
             self.active_unit.hierarchy_root.add_image(remove_extension(filename), target_path)
             self._update_active_init_metadata()
+            self.event_bus.activeUnitUpdated.emit()
 
             print(f"Imported image to {target_path}")
             return target_path  # Optional: return for tracking
 
 
-# Editing meta
 
+    # Update current item meta
     def _update_active_init_metadata(self):
         if self.active_unit:
             unit_path = self.active_unit.unit_path
