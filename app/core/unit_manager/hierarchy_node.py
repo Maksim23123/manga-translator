@@ -1,4 +1,7 @@
 class HierarchyNode:
+    FOLDER_TYPE = "folder"
+    IMAGE_TYPE = "image"
+
     def __init__(self, name, node_type, image_path=None):
         self.name = name
         self.type = node_type  # 'folder' or 'image'
@@ -11,7 +14,7 @@ class HierarchyNode:
             "name": self.name,
             "type": self.type,
         }
-        if self.type == "image":
+        if self.type == self.IMAGE_TYPE:
             data["image_path"] = self.image_path
         else:
             data["children"] = [child.to_dict() for child in self.children]
@@ -19,16 +22,16 @@ class HierarchyNode:
 
 
     def add_image(self, name, path):
-        self.children.append(HierarchyNode(name, "image", path))
+        self.children.append(HierarchyNode(name, self.IMAGE_TYPE, path))
     
 
     def add_folder(self, name):
-        self.children.append(HierarchyNode(name, "folder"))
+        self.children.append(HierarchyNode(name, self.FOLDER_TYPE))
 
 
     @staticmethod
     def from_dict(data):
         node = HierarchyNode(data["name"], data["type"], data.get("image_path"))
-        if node.type == "folder":
+        if node.type == HierarchyNode.FOLDER_TYPE:
             node.children = [HierarchyNode.from_dict(c) for c in data.get("children", [])]
         return node

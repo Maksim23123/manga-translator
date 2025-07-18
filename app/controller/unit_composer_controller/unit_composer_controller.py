@@ -4,6 +4,9 @@ from gui.tabs.unit_composer.unit_composer import UnitComposer
 from .unit_list.new_unit_dialog_contorller import NewUnitDialogController
 from gui.tabs.unit_composer.unit_list.unit_creation_dialog import UnitCreationDialog
 from .unit_list.unit_list_item_controller import UnitListItemController 
+from .unit_hierarchy.hierarchy_tree_view_controller import HierarchyTreeViewController
+
+
 
 class UnitComposerController:
     def __init__(self, core: Core, unit_composer: UnitComposer):
@@ -15,6 +18,11 @@ class UnitComposerController:
         self._connect_controller()
 
         self._update_unit_item_controller_list()
+        self._init_subcontrollers()
+
+    
+    def _init_subcontrollers(self):
+        self.hierarchy_tree_view_controller = HierarchyTreeViewController(self.core, self.unit_composer.unit_hierarchy_treeView)
     
 
     def _connect_controller(self):
