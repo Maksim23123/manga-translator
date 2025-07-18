@@ -1,18 +1,15 @@
-from PySide6.QtCore import QAbstractItemModel, QModelIndex, Qt
+from PySide6.QtCore import QAbstractItemModel, QModelIndex, Qt, QMimeData
 from core.unit_manager.hierarchy_node import HierarchyNode
+from core.core import Core
 
 
 class HierarchyTreeViewModel(QAbstractItemModel):
-    def __init__(self, root_node: HierarchyNode = HierarchyNode("root", HierarchyNode.FOLDER_TYPE), parent=None):
+    def __init__(self, core: Core, root_node: HierarchyNode = HierarchyNode("root", HierarchyNode.FOLDER_TYPE), parent=None):
         super().__init__(parent)
+        self.core = core
         self.root_node = root_node
-
-
-    def set_root_node(self, new_root_node: HierarchyNode):
-        self.beginResetModel()
-        self.root_node = new_root_node
-        self.endResetModel()
         
+# Base class implementation
 
     def index(self, row, column, parent: QModelIndex):
         parent_node = self.get_node(parent)
@@ -53,7 +50,6 @@ class HierarchyTreeViewModel(QAbstractItemModel):
 
     def rowCount(self, parent: QModelIndex) -> int:
         parent_node = self.get_node(parent)
-        print(f"rowCount for {parent_node.name}")
         return len(parent_node.children) if parent_node.type == HierarchyNode.FOLDER_TYPE else 0
     
 
@@ -67,7 +63,7 @@ class HierarchyTreeViewModel(QAbstractItemModel):
 
         node = self.get_node(index)
 
-        if role == Qt.DisplayRole:
+        if role in (Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole):
             if index.column() == 0:
                 return node.name
 
@@ -85,6 +81,31 @@ class HierarchyTreeViewModel(QAbstractItemModel):
         else:
             return base_flags | Qt.ItemFlag.ItemIsDragEnabled
     
+
+    def setData(self, index: QModelIndex, value, role=Qt.EditRole):
+        if not index.isValid():
+            return False
+        
+        node = self.get_node(index)
+        if role == Qt.EditRole:
+            node.name = str(value)
+            self.dataChanged.emit(index, index, [Qt.ItemDataRole.DisplayRole])
+            self.core.event_bus.activeUnitUpdated.emit()
+            return True
+        
+        return False
+
+
+    def supportedDropActions(self):
+        return Qt.DropAction.MoveAction | Qt.DropAction.CopyAction
+        
+# External access
+
+    def set_root_node(self, new_root_node: HierarchyNode):
+        self.beginResetModel()
+        self.root_node = new_root_node
+        self.endResetModel()
+
 
     def is_root(self, index: QModelIndex) -> bool:
         node = self.get_node(index) if index.isValid() else self.root_node

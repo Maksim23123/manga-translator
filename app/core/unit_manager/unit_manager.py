@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 from .unit import Unit
 import shutil
+import uuid
 
 
 class UnitManager:
@@ -27,6 +28,11 @@ class UnitManager:
         if root_path and os.path.exists(root_path):
             self.base_path = os.path.join(root_path, self.DEFAULT_UNITS_DIR_PATH)
             os.makedirs(self.base_path, exist_ok=True)
+    
+
+    def _connect_to_events(self):
+        self.event_bus.activeProjectChanged.connect(self._init_units_folder_path)
+        self.event_bus.activeUnitUpdated.connect(self._update_active_unit_metadata)
 
 # Unit creation
 
@@ -71,7 +77,7 @@ class UnitManager:
 
     def set_active(self, unit: Unit):
         if unit:
-            self._update_active_init_metadata()
+            self._update_active_unit_metadata()
             self.active_unit = unit
             self.event_bus.activeUnitChanged.emit()
 
@@ -129,7 +135,7 @@ class UnitManager:
             shutil.copy2(image_path, target_path)
 
             self.active_unit.hierarchy_root.add_image(remove_extension(filename), target_path)
-            self._update_active_init_metadata()
+            self._update_active_unit_metadata()
             self.event_bus.activeUnitUpdated.emit()
 
             print(f"Imported image to {target_path}")
@@ -138,15 +144,14 @@ class UnitManager:
 
 
     # Update current item meta
-    def _update_active_init_metadata(self):
+    def _update_active_unit_metadata(self):
         if self.active_unit:
             unit_path = self.active_unit.unit_path
             meta_file = os.path.join(unit_path, "unit.json")
             with open(meta_file, "w", encoding="utf-8") as f:
                 json.dump(self.active_unit.to_metadata(), f, indent=4)
 
-    def _connect_to_events(self):
-        self.event_bus.activeProjectChanged.connect(self._init_units_folder_path)
+
 
 
 def remove_extension(filename: str) -> str:
