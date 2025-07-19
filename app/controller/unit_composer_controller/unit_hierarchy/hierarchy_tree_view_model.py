@@ -1,6 +1,9 @@
 from PySide6.QtCore import QAbstractItemModel, QModelIndex, Qt, QMimeData, QByteArray, QDataStream, QIODevice
+from PySide6.QtGui import QIcon, QPalette
+from PySide6.QtWidgets import QApplication
 from core.unit_manager.hierarchy_node import HierarchyNode
 from core.core import Core
+from icons.icons import Icons
 
 # TODO: build node path system so search will be more efficient
 class HierarchyTreeViewModel(QAbstractItemModel):
@@ -11,7 +14,15 @@ class HierarchyTreeViewModel(QAbstractItemModel):
         super().__init__(parent)
         self.core = core
         self.root_node = root_node
+        self._init_icons()
+    
+    
+    def _init_icons(self):
+        color = QApplication.palette().color(QPalette.Text)
+        self.folder_icon = Icons.get_colored_icon(Icons.FOLDER_ICON_PATH, color)
+        self.image_icon = Icons.get_colored_icon(Icons.IMAGE_ICON_PATH, color)
 
+# Base class implementation
 
     def index(self, row, column, parent: QModelIndex):
         parent_node = self.get_node(parent)
@@ -68,7 +79,12 @@ class HierarchyTreeViewModel(QAbstractItemModel):
         if role in (Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole):
             if index.column() == 0:
                 return node.name
-
+        elif role == Qt.ItemDataRole.DecorationRole:
+            if node.type == HierarchyNode.IMAGE_TYPE:
+                return self.image_icon
+            else:
+                return self.folder_icon
+        
         return None
     
 
