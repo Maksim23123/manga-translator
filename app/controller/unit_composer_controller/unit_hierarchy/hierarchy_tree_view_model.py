@@ -4,12 +4,14 @@ from core.core import Core
 
 # TODO: build node path system so search will be more efficient
 class HierarchyTreeViewModel(QAbstractItemModel):
+
+    MIME_TYPE = 'application/x-unithierarchytreeviewmodel'
+
     def __init__(self, core: Core, root_node: HierarchyNode = HierarchyNode("root", HierarchyNode.FOLDER_TYPE), parent=None):
         super().__init__(parent)
         self.core = core
         self.root_node = root_node
-        
-# Base class implementation
+
 
     def index(self, row, column, parent: QModelIndex):
         parent_node = self.get_node(parent)
@@ -91,7 +93,7 @@ class HierarchyTreeViewModel(QAbstractItemModel):
         if role == Qt.EditRole:
             node.name = str(value)
             self.dataChanged.emit(index, index, [Qt.ItemDataRole.DisplayRole])
-            self.core.event_bus.activeUnitUpdated.emit()
+            self.emit_data_updated()
             return True
         
         return False
@@ -102,7 +104,7 @@ class HierarchyTreeViewModel(QAbstractItemModel):
 
 
     def mimeTypes(self):
-        return ['application/x-unithierarchytreeviewmodel']
+        return [self.MIME_TYPE]
 
 
     def mimeData(self, indexes: list[QModelIndex]):
@@ -110,67 +112,56 @@ class HierarchyTreeViewModel(QAbstractItemModel):
         encoded = QByteArray()
 
         stream = QDataStream(encoded, QIODevice.OpenModeFlag.WriteOnly)
-
+        
+        draged_node_ids = []
         for index in indexes:
             if index.isValid():
                 node = self.get_node(index)
-                stream.writeQString(node.id)
-                break
+                draged_node_ids.append(node.id)
+
+        stream.writeQStringList(draged_node_ids)
         
         mime_data.setData(self.mimeTypes()[0], encoded)
         return mime_data
     
 
     def dropMimeData(self, data: QMimeData, action: Qt.DropAction, row, column, parent: QModelIndex):
-        # Get draged_node
+
+        if column > 0:
+            print("Warning: Column shouldn't be more then 0")
+        # Get draged_nodes
         encoded_data = data.retrieveData(self.mimeTypes()[0], QByteArray)
 
         stream = QDataStream(encoded_data, QIODevice.OpenModeFlag.ReadOnly)
 
-        draged_node_id = stream.readQString()
+        draged_node_ids = stream.readQStringList()
+        draged_nodes = list()
 
-        draged_node = self.get_node_by_id(self.root_node, draged_node_id)
-        # Perform actions with dragged node
-        if isinstance(draged_node, HierarchyNode):
+        new_parent_node = self.get_node(parent)
+
+        for draged_node_id in draged_node_ids:    
+            draged_node = self.get_node_by_id(self.root_node, draged_node_id)
+            if not draged_node:
+                continue
+            draged_nodes.append(draged_node)
             old_parent_node = self.find_parent(self.root_node, draged_node)
-            
             draged_node_old_row = old_parent_node.children.index(draged_node)
-            draged_node_index = self.createIndex(draged_node_old_row, 0, draged_node)
-            old_parent_node_index = self.parent(draged_node_index)
+            
+            # Adjust row if we're moving inside the same parent and dropping below original index
+            if old_parent_node == new_parent_node and row > draged_node_old_row and not action == Qt.DropAction.CopyAction:
+                row -= 1
 
-            if old_parent_node_index.isValid():
-                new_parent_node = self.get_node(parent)
+            if action == Qt.DropAction.MoveAction:
+                draged_node_index = self.createIndex(draged_node_old_row, 0, draged_node)
+                old_parent_node_index = self.parent(draged_node_index)
+                self.removeRow(draged_node_old_row, old_parent_node_index)
 
-                new_row_index = row if not row < 0 else len(new_parent_node.children) - 1
+        if row < 0:
+            row = len(new_parent_node.children) + 1
 
-                if parent.isValid():
-                    self.beginMoveRows(old_parent_node_index, draged_node_old_row, draged_node_old_row, parent, new_row_index)
-                else:
-                    self.beginResetModel()
-
-                if old_parent_node == new_parent_node:
-                    if row == draged_node_old_row:
-                        return True
-                    elif (row > draged_node_old_row and not action == Qt.DropAction.CopyAction):
-                        row -= 1
-
-                if action == Qt.DropAction.MoveAction:
-                    old_parent_node.children.remove(draged_node)
-                
-                if 0 <= row < len(new_parent_node.children):
-                    new_parent_node.children.insert(row, draged_node)
-                else:
-                    new_parent_node.children.append(draged_node)
-
-                if parent.isValid():
-                    self.endMoveRows()
-                else:
-                    self.endResetModel()
-                
-                self.core.event_bus.activeUnitUpdated.emit()
-
-                return True
-        return False
+        result = self._insert_nodes(row, draged_nodes, parent)
+        self.emit_data_updated()
+        return result
 
 
     def get_node_by_id(self, current: HierarchyNode, target_id):
@@ -184,6 +175,30 @@ class HierarchyTreeViewModel(QAbstractItemModel):
                         return found
                 elif child.id == target_id:
                     return child
+    
+
+    def removeRow(self, row, parent: QModelIndex) -> bool:
+        parent_node = self.get_node(parent)
+        if parent_node:
+            self.beginRemoveRows(parent, row, row)
+            parent_node.children.pop(row)
+            self.endRemoveRows()
+            return True
+        return False
+
+
+    def _insert_nodes(self, row, nodes: list[HierarchyNode], parent: QModelIndex):
+        parent_node = self.get_node(parent)
+        if parent_node:
+            self.beginResetModel()
+            parent_node.children = [*parent_node.children[:row], *nodes, *parent_node.children[row:]]
+            self.endResetModel()
+            return True
+        return False
+    
+
+    def emit_data_updated(self):
+        self.core.event_bus.activeUnitUpdated.emit()
         
 # External access
 
@@ -199,24 +214,36 @@ class HierarchyTreeViewModel(QAbstractItemModel):
 
 
     def create_folder(self, index: QModelIndex):
+        NEW_FOLDER_NAME = "New Chapter"
+
         self.beginResetModel()
-        parent_node = self.get_node(index) if index.isValid() else self.root_node
+        current_node = self.get_node(index) if index.isValid() else self.root_node
 
-        if parent_node:
-            parent_node.add_folder("New folder")
+        if current_node:
+            if current_node.type == HierarchyNode.FOLDER_TYPE:
+                current_node.add_folder(NEW_FOLDER_NAME)
+            else:
+                parent_node_index = index.parent()
+                parent_node = self.get_node(parent_node_index)
 
-        
+                if parent_node:
+                    current_index = parent_node.children.index(current_node)
+                    parent_node.children.insert(current_index, HierarchyNode(NEW_FOLDER_NAME, HierarchyNode.FOLDER_TYPE))
+
         self.endResetModel()
+        self.emit_data_updated()
     
 
-    def delete_node(self, index: QModelIndex):
+    def delete_nodes(self, indexes: list[QModelIndex]):
         self.beginResetModel()
-        node = self.get_node(index) if index.isValid() else None
-        parent_node = self.find_parent(self.root_node, node)
+        for index in indexes:
+            node = self.get_node(index) if index.isValid() else None
+            parent_node = self.find_parent(self.root_node, node)
 
-        if node and parent_node:
-            parent_node.children.remove(node)
+            if node and parent_node:
+                parent_node.children.remove(node)
         self.endResetModel()
+        self.emit_data_updated()
     
 
     def update_model(self):

@@ -17,7 +17,7 @@ class HierarchyTreeViewController():
 
         # Tree view configuration
         self.hierarchy_treeView.setHeaderHidden(True)
-        self.hierarchy_treeView.setSelectionMode(QTreeView.SingleSelection)
+        self.hierarchy_treeView.setSelectionMode(QTreeView.SelectionMode.ExtendedSelection)
         self.hierarchy_treeView.setSelectionBehavior(QTreeView.SelectRows)
         self.hierarchy_treeView.setEditTriggers(QTreeView.DoubleClicked | QTreeView.EditKeyPressed)
         self.hierarchy_treeView.setDragEnabled(True)
@@ -54,21 +54,20 @@ class HierarchyTreeViewController():
     
 
     def _open_context_menu(self, position: QPoint):
-        index = self.hierarchy_treeView.indexAt(position)
-        
         menu = QMenu(self.hierarchy_treeView)
 
         # Add folder option
-        create_action = QAction("Create Folder", menu)
-        create_action.triggered.connect(lambda: self.model.create_folder(index))
+        index_at_position = self.hierarchy_treeView.indexAt(position)
+        create_action = QAction("Create Chapter", menu)
+        create_action.triggered.connect(lambda: self.model.create_folder(index_at_position))
         menu.addAction(create_action)
 
 
         # Delete option only if node is not root
-        if not self.model.is_root(index):
-            delete_action = QAction("Delete", menu)
-            delete_action.triggered.connect(lambda: self.model.delete_node(index))
-            menu.addAction(delete_action)
+        indexes = self.hierarchy_treeView.selectedIndexes()
+        delete_action = QAction("Delete", menu)
+        delete_action.triggered.connect(lambda: self.model.delete_nodes(indexes))
+        menu.addAction(delete_action)
 
         menu.exec_(self.hierarchy_treeView.viewport().mapToGlobal(position))
 
@@ -95,15 +94,14 @@ class HierarchyTreeViewController():
     def _on_expanded(self, index: QModelIndex):
         node = self.model.get_node(index) if index.isValid() else None
 
-        if node:
+        if node and not node.id in self._expanded_ids:
             self._expanded_ids.append(node.id)
     
 
     def _on_collapse(self, index: QModelIndex):
         node = self.model.get_node(index) if index.isValid() else None
 
-        if node and node.id in self._expanded_ids:
-            self._expanded_ids.remove(node.id)
+        self._expanded_ids.remove(node.id)
     
 
     def _clear_expanded_nodes_ids(self):
