@@ -21,5 +21,9 @@ class UnitDetailsWidget(QWidget):
     def _setup_ui(self):
         self.ui = Ui_UnitDetailsWidget()
         self.ui.setupUi(self)
-        
 
+        self.unit_name_lineEdit = self.ui.unit_name_lineEdit
+        self.unit_path_lineEdit = self.ui.unit_path_lineEdit
+        self.save_changes_pushButton = self.ui.save_changes_pushButton
+        self.discard_changes_pushButton = self.ui.discard_changes_pushButton
+        

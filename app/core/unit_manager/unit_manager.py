@@ -32,7 +32,7 @@ class UnitManager:
 
     def _connect_to_events(self):
         self.event_bus.activeProjectChanged.connect(self._init_units_folder_path)
-        self.event_bus.activeUnitUpdated.connect(self._update_active_unit_metadata)
+        self.event_bus.activeUnitUpdated.connect(self.update_active_unit_metadata)
 
 # Unit creation
 
@@ -70,15 +70,19 @@ class UnitManager:
         if not os.path.exists(meta_file):
             raise FileNotFoundError(f"Metadata not found at {meta_file}")
         with open(meta_file, "r", encoding="utf-8") as f:
-            unit_data = json.load(f)
+            try:
+                unit_data = json.load(f)
+            except json.decoder.JSONDecodeError:
+                print(f"Warning: Corupted metadata located at {unit_path}")
+                return None
 
         return Unit(unit_data, unit_path)
     
 
     def set_active(self, unit: Unit):
-        if unit:
-            self._update_active_unit_metadata()
-            self.active_unit = unit
+        if unit and self.is_unit(unit.unit_path):
+            self.update_active_unit_metadata()
+            self.active_unit = self.load_unit(unit.unit_path)
             self.event_bus.activeUnitChanged.emit()
 
 
@@ -137,16 +141,25 @@ class UnitManager:
             shutil.copy2(image_path, target_path)
 
             self.active_unit.hierarchy_root.add_image(remove_extension(filename), target_path)
-            self._update_active_unit_metadata()
+            self.update_active_unit_metadata()
             self.event_bus.activeUnitUpdated.emit()
 
             print(f"Imported image to {target_path}")
             return target_path  # Optional: return for tracking
 
+# Unit Update
+
+    def set_unit_name(self, new_name: str):
+        if self.active_unit and new_name:
+            self.active_unit.unit_name = new_name
+            self.update_active_unit_metadata()
+            self.event_bus.activeUnitChanged.emit()
+            self.event_bus.unitsUpdated.emit()
 
 
-    # Update current item meta
-    def _update_active_unit_metadata(self):
+# Update current unit meta
+
+    def update_active_unit_metadata(self):
         if self.active_unit and self.is_unit(self.active_unit.unit_path):
             unit_path = self.active_unit.unit_path
             meta_file = os.path.join(unit_path, "unit.json")

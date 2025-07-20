@@ -18,7 +18,9 @@ class UnitListItemController:
 
 
     def _delete_on_click(self):
-        self.core.unit_manager.delete_unit(self.unit_list_item_widget.unit.unit_path)
+        unit = self.unit_list_item_widget.unit
+        if unit:
+            self.core.unit_manager.delete_unit(self.unit_list_item_widget.unit.unit_path)
     
 
     def _on_active_unit_chagned(self):

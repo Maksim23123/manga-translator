@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'hierarchyItemDetailsWidgetRDVYnv.ui'
+## Form generated from reading UI file 'hierarchyItemDetailsWidgetvJbZAZ.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.1
 ##
@@ -30,7 +30,7 @@ class Ui_HierarchyItemDetailsWidget(object):
         self.image_preview_label = QLabel(HierarchyItemDetailsWidget)
         self.image_preview_label.setObjectName(u"image_preview_label")
 
-        self.verticalLayout.addWidget(self.image_preview_label)
+        self.verticalLayout.addWidget(self.image_preview_label, 0, Qt.AlignmentFlag.AlignHCenter)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -41,7 +41,8 @@ class Ui_HierarchyItemDetailsWidget(object):
 
         self.item_name_lineEdit = QLineEdit(HierarchyItemDetailsWidget)
         self.item_name_lineEdit.setObjectName(u"item_name_lineEdit")
-        self.item_name_lineEdit.setEnabled(False)
+        self.item_name_lineEdit.setEnabled(True)
+        self.item_name_lineEdit.setReadOnly(True)
 
         self.horizontalLayout.addWidget(self.item_name_lineEdit)
 
@@ -57,7 +58,8 @@ class Ui_HierarchyItemDetailsWidget(object):
 
         self.item_type_lineEdit = QLineEdit(HierarchyItemDetailsWidget)
         self.item_type_lineEdit.setObjectName(u"item_type_lineEdit")
-        self.item_type_lineEdit.setEnabled(False)
+        self.item_type_lineEdit.setEnabled(True)
+        self.item_type_lineEdit.setReadOnly(True)
 
         self.horizontalLayout_2.addWidget(self.item_type_lineEdit)
 
@@ -78,7 +80,8 @@ class Ui_HierarchyItemDetailsWidget(object):
 
         self.children_number_lineEdit = QLineEdit(self.children_number_widget)
         self.children_number_lineEdit.setObjectName(u"children_number_lineEdit")
-        self.children_number_lineEdit.setEnabled(False)
+        self.children_number_lineEdit.setEnabled(True)
+        self.children_number_lineEdit.setReadOnly(True)
 
         self.horizontalLayout_3.addWidget(self.children_number_lineEdit)
 
@@ -102,7 +105,8 @@ class Ui_HierarchyItemDetailsWidget(object):
 
         self.image_path_lineEdit = QLineEdit(self.image_path_widget)
         self.image_path_lineEdit.setObjectName(u"image_path_lineEdit")
-        self.image_path_lineEdit.setEnabled(False)
+        self.image_path_lineEdit.setEnabled(True)
+        self.image_path_lineEdit.setReadOnly(True)
 
         self.horizontalLayout_5.addWidget(self.image_path_lineEdit)
 

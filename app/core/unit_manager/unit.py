@@ -13,8 +13,8 @@ class Unit:
             self.hierarchy_root = HierarchyNode("root", 'folder')
     
     
-
     def to_metadata(self):
+        self.unit_data["unit_name"] = self.unit_name
         self.unit_data["hierarchy"] = self.hierarchy_root.to_dict()
         return self.unit_data
 

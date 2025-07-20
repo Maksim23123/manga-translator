@@ -7,7 +7,9 @@ import os
 class NewUnitDialogController:
     # Regex pattern: allows letters, numbers, underscores, dashes, and dots
     # No leading/trailing whitespace, no forbidden characters
-    _VALID_NAME_PATTERN = re.compile(r"^(?!^(PRN|AUX|NUL|CON|COM\d|LPT\d)$)[a-zA-Z0-9._-]+$")
+    _VALID_NAME_PATTERN = re.compile(
+            r"^(?!^(PRN|AUX|NUL|CON|COM\d|LPT\d)$)[a-zA-Z0-9._\s-]+$"
+        )
 
 
     def __init__(self, unit_creation_dialog: UnitCreationDialog, unit_manager: UnitManager):
@@ -34,8 +36,8 @@ class NewUnitDialogController:
 
         self.unit_creation_dialog.accept()
     
-
-    def is_valid_unit_name(self, name: str) -> bool:
+    @classmethod
+    def is_valid_unit_name(cls, name: str) -> bool:
 
         name = name.strip()
 
@@ -44,7 +46,7 @@ class NewUnitDialogController:
             return False
 
         # Must match allowed pattern and avoid reserved names
-        return self._VALID_NAME_PATTERN.fullmatch(name) is not None
+        return cls._VALID_NAME_PATTERN.fullmatch(name) is not None
     
 
     def show_warning(self, title: str, message: str):

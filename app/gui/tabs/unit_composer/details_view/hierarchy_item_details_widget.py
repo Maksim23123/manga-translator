@@ -21,5 +21,12 @@ class HierarchyItemDetailsWidget(QWidget):
     def _setup_ui(self):
         self.ui = Ui_HierarchyItemDetailsWidget()
         self.ui.setupUi(self)
-        
 
+        self.image_preview_label = self.ui.image_preview_label
+        self.image_path_widget = self.ui.image_path_widget
+        self.children_number_widget = self.ui.children_number_widget
+
+        self.item_name_lineEdit = self.ui.item_name_lineEdit
+        self.item_type_lineEdit = self.ui.item_type_lineEdit
+        self.image_path_lineEdit = self.ui.image_path_lineEdit
+        self.children_number_lineEdit = self.ui.children_number_lineEdit

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'unitDetailsWidgetdRSsbe.ui'
+## Form generated from reading UI file 'unitDetailsWidgetPpvzJa.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.1
 ##
@@ -52,7 +52,8 @@ class Ui_UnitDetailsWidget(object):
 
         self.unit_path_lineEdit = QLineEdit(UnitDetailsWidget)
         self.unit_path_lineEdit.setObjectName(u"unit_path_lineEdit")
-        self.unit_path_lineEdit.setEnabled(False)
+        self.unit_path_lineEdit.setEnabled(True)
+        self.unit_path_lineEdit.setReadOnly(True)
 
         self.horizontalLayout_5.addWidget(self.unit_path_lineEdit, 0, Qt.AlignmentFlag.AlignTop)
 
