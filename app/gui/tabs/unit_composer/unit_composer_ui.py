@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'unit_composerpJBhjy.ui'
+## Form generated from reading UI file 'unit_composervxZUMi.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.1
 ##
@@ -36,15 +36,15 @@ class Ui_UnitComposer(object):
 
         self.verticalLayout_2.addWidget(self.detailsLabel)
 
-        self.scrollArea = QScrollArea(self.centralwidget)
-        self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setWidgetResizable(True)
+        self.details_view_scrollArea = QScrollArea(self.centralwidget)
+        self.details_view_scrollArea.setObjectName(u"details_view_scrollArea")
+        self.details_view_scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 536, 313))
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 498, 284))
+        self.details_view_scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.verticalLayout_2.addWidget(self.scrollArea)
+        self.verticalLayout_2.addWidget(self.details_view_scrollArea)
 
 
         self.verticalLayout.addLayout(self.verticalLayout_2)

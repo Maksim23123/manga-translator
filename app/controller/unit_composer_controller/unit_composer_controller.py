@@ -67,6 +67,5 @@ class UnitComposerController:
             widget = self.unit_composer.unit_listWidget.itemWidget(item)
             if widget:
                 print(f"Newly selected unit: {widget.unit.unit_name}")
-                # Example: set as active unit
                 self.core.unit_manager.set_active(widget.unit) 
         

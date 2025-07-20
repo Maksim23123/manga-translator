@@ -51,6 +51,8 @@ class HierarchyTreeViewController():
             self.model.set_root_node(active_unit.hierarchy_root)
             self.hierarchy_treeView.setModel(self.model)
             self._restore_expanded_nodes()
+        else:
+            self.model.clear()
     
 
     def _open_context_menu(self, position: QPoint):

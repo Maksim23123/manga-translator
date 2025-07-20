@@ -56,7 +56,7 @@ class UnitManager:
             json.dump(metadata, f, indent=4)
 
         print(f"Unit '{unit_name}' created at {unit_path}")
-        if set_new_active: self.active_unit = self.load_unit(unit_path)
+        if set_new_active: self.set_active(self.load_unit(unit_path)) 
 
         self.event_bus.unitsUpdated.emit()
 
@@ -107,7 +107,9 @@ class UnitManager:
 
     def delete_unit(self, unit_path: str) -> bool:
         if self.is_unit(unit_path):
-            if self.active_unit and self.active_unit.unit_path == unit_path: self.active_unit = None
+            if self.active_unit and self.active_unit.unit_path == unit_path: 
+                self.active_unit = None
+                self.event_bus.activeUnitChanged.emit()
             shutil.rmtree(unit_path)
             self.event_bus.unitsUpdated.emit()
 
@@ -145,7 +147,7 @@ class UnitManager:
 
     # Update current item meta
     def _update_active_unit_metadata(self):
-        if self.active_unit:
+        if self.active_unit and self.is_unit(self.active_unit.unit_path):
             unit_path = self.active_unit.unit_path
             meta_file = os.path.join(unit_path, "unit.json")
             with open(meta_file, "w", encoding="utf-8") as f:

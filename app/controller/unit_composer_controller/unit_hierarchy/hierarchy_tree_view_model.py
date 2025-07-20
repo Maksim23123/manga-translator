@@ -232,13 +232,17 @@ class HierarchyTreeViewModel(QAbstractItemModel):
     def create_folder(self, index: QModelIndex):
         NEW_FOLDER_NAME = "New Chapter"
 
-        self.beginResetModel()
+        
         current_node = self.get_node(index) if index.isValid() else self.root_node
 
         if current_node:
             if current_node.type == HierarchyNode.FOLDER_TYPE:
+                self.beginResetModel()
                 current_node.add_folder(NEW_FOLDER_NAME)
-            else:
+                self.endResetModel()
+            elif current_node != self.root_node:
+                self.beginResetModel()
+
                 parent_node_index = index.parent()
                 parent_node = self.get_node(parent_node_index)
 
@@ -246,8 +250,13 @@ class HierarchyTreeViewModel(QAbstractItemModel):
                     current_index = parent_node.children.index(current_node)
                     parent_node.children.insert(current_index, HierarchyNode(NEW_FOLDER_NAME, HierarchyNode.FOLDER_TYPE))
 
-        self.endResetModel()
+                self.endResetModel()
+            else:
+                return
+            
         self.emit_data_updated()
+        
+        
     
 
     def delete_nodes(self, indexes: list[QModelIndex]):
@@ -265,3 +274,10 @@ class HierarchyTreeViewModel(QAbstractItemModel):
     def update_model(self):
         self.beginResetModel()
         self.endResetModel()
+
+    
+    def clear(self):
+        self.beginResetModel()
+        self.root_node = HierarchyNode("None", HierarchyNode.IMAGE_TYPE)
+        self.endResetModel()
+        
