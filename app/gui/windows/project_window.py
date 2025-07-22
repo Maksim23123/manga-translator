@@ -64,11 +64,21 @@ class ProjectWindow(QMainWindow):
 
 
     def _add_tabs(self):
+        self.pipline_editor = SubMainWindow(1)
+
+        # Wrap sub-main-window in a QWidget for tab embedding
+        pipline_editor_container = QWidget()
+        pipline_editor_layout = QVBoxLayout(pipline_editor_container)
+        pipline_editor_layout.setContentsMargins(0, 0, 0, 0)
+        pipline_editor_layout.addWidget(self.pipline_editor)
+        self.tabs.addTab(pipline_editor_container, f"Pipeline editor")
+
+
         self.unit_composer = UnitComposer(self.core)
 
         # Wrap sub-main-window in a QWidget for tab embedding
-        container = QWidget()
-        layout = QVBoxLayout(container)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self.unit_composer)
-        self.tabs.addTab(container, f"Manga Composer")
+        unit_composer_container = QWidget()
+        unit_composer_layout = QVBoxLayout(unit_composer_container)
+        unit_composer_layout.setContentsMargins(0, 0, 0, 0)
+        unit_composer_layout.addWidget(self.unit_composer)
+        self.tabs.addTab(unit_composer_container, f"Manga Composer")
