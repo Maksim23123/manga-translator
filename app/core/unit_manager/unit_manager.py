@@ -18,6 +18,7 @@ class UnitManager:
         self.event_bus = event_bus
         self.context = context
         self.active_unit = None #TODO: Make active item private
+        self.base_path = None
         self._init_units_folder_path()
         self._connect_to_events()
 
@@ -37,6 +38,8 @@ class UnitManager:
 # Unit creation
 
     def create_new_unit(self, unit_name, set_new_active=True):
+        if not self.base_path:
+            return
 
         unit_path = os.path.join(self.base_path, unit_name)
 
@@ -96,6 +99,9 @@ class UnitManager:
     
 
     def get_unit_list(self):
+        if not self.base_path:
+            return
+
         units = [
             f for f in os.scandir(self.base_path)
             if f.is_dir() and self.is_unit(f.path)

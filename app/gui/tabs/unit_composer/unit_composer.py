@@ -49,10 +49,11 @@ class UnitComposer(QMainWindow):
         self.unit_item_widget_list.clear()
         unit_list = self.core.unit_manager.get_unit_list()
 
-        for unit in unit_list:
-            is_active = False
-            if self.core.unit_manager.active_unit and unit.unit_name == self.core.unit_manager.active_unit.unit_name: is_active = True
-            self._add_list_item(unit, is_active)
+        if unit_list:
+            for unit in unit_list:
+                is_active = False
+                if self.core.unit_manager.active_unit and unit.unit_name == self.core.unit_manager.active_unit.unit_name: is_active = True
+                self._add_list_item(unit, is_active)
         
         self.unit_list_updated.emit()
 

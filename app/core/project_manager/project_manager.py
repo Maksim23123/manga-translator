@@ -21,10 +21,12 @@ class ProjectManager:
     
 
     def open_last_project(self):
-        last_project_path = self.context.active_project_directory
+        last_project_path = self.context.last_active_project_directory
 
-        if last_project_path:
+        if last_project_path and os.path.exists(last_project_path):
             self.open_project(last_project_path)
+        else:
+            print("Warning:Project directory doesn't exist. Last project loading failed.")
 
 
     def _init_projects_folder_path(self):

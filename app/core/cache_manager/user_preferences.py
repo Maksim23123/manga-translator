@@ -42,4 +42,4 @@ class UserPreferences:
     
 
     def _perform_initial_load(self):
-        self.context.active_project_directory = self.get_last_project()
+        self.context.last_active_project_directory = self.get_last_project()
