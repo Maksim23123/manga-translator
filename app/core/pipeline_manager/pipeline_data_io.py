@@ -58,7 +58,8 @@ class PipelineDataIO:
     def write_pipeline_data_to_active_project(self, pipeline_data: PipelineData):
         metadata = pipeline_data.to_dict()
 
-        os.makedirs(self.get_pipeline_data_dir_path())
+
+        os.makedirs(self.get_pipeline_data_dir_path(), exist_ok=True)
 
         meta_file = self.get_pipeline_data_path()
         if meta_file:

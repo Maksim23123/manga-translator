@@ -7,6 +7,14 @@ from .pipeline_unit import PipelineUnit
 class PipelineDataModel:
     def __init__(self):
         self._pipeline_data = None
+
+    
+    @property
+    def initialized(self):
+        if self._pipeline_data:
+            return True
+        else:
+            return False
     
 
     def _check_pipeline_data(self):

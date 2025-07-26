@@ -38,9 +38,9 @@ class PipelineManager:
 
         # Test
 
-        # self.test_new_pipeline_data_functionality()
+        self.test_new_pipeline_data_functionality()
 
-        self.test_pipeline_data_loading()
+        # self.test_pipeline_data_loading()
 
 
     def _connect_to_events(self):
@@ -77,9 +77,8 @@ class PipelineManager:
         """
         Saves pipeline data to current project.
         """
-
-        current_method = inspect.currentframe().f_code.co_name
-        raise Exception(f"Unimplemented method called: {current_method}")
+        if self._pipeline_data:
+            self.pipeline_data_io.write_pipeline_data_to_active_project(self._pipeline_data)
     
 
     def test_new_pipeline_data_functionality(self): # TODO: Remove this method on finishing base functionality of PipelineManager.
@@ -117,4 +116,7 @@ class PipelineManager:
     def test_pipeline_data_loading(self):
         self.reload_pipeline_data()
 
-        print(self.pipeline_data_model.get_pipeline_names_list())
+        if self.pipeline_data_model.initialized:
+            print(self.pipeline_data_model.get_pipeline_names_list())
+        else:
+            print("Pipeline data wasn't loaded")

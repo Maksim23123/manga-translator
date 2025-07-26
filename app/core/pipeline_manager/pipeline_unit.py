@@ -41,6 +41,9 @@ class PipelineUnit:
 
     @classmethod
     def get_from_raw(cls, raw_data: dict):
-        
-        current_method = inspect.currentframe().f_code.co_name
-        raise Exception(f"Unimplemented method called: {current_method}")
+
+        name = raw_data[PipelineUnit.NAME_KEY]
+
+        pipeline_unit = PipelineUnit(name)
+
+        return pipeline_unit
