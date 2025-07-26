@@ -26,7 +26,7 @@ class PipelineManager:
     def __init__(self, event_bus: EventBus, context: Context):
         self.context = context
         self.event_bus = event_bus
-        self.pipeline_data = None # Object that holds list of pipelines in the project.
+        self._pipeline_data = None # Object that holds list of pipelines in the project.
         self.active_pipeline = None # Holds referece to currently active pipeline.
         
         self.pipeline_data_io = PipelineDataIO(self.context)
@@ -37,7 +37,10 @@ class PipelineManager:
         self.reload_pipeline_data()
 
         # Test
-        self.test_pipeline_manager_functionality()
+
+        # self.test_new_pipeline_data_functionality()
+
+        self.test_pipeline_data_loading()
 
 
     def _connect_to_events(self):
@@ -51,7 +54,7 @@ class PipelineManager:
         project change, to ensure that all old data erased.
         """
 
-        self.pipeline_data = None
+        self._pipeline_data = None
         self.active_pipeline = None
 
 
@@ -66,8 +69,8 @@ class PipelineManager:
         
         if active_project_dir and os.path.exists(active_project_dir):
             loaded_pipeline_data = self.pipeline_data_io.load_active_project_pipeline_data()
-            self.pipeline_data = loaded_pipeline_data if loaded_pipeline_data else PipelineData()
-            self.pipeline_data_model.set_pipeline_data(self.pipeline_data)
+            self._pipeline_data = loaded_pipeline_data if loaded_pipeline_data else PipelineData()
+            self.pipeline_data_model.set_pipeline_data(self._pipeline_data)
     
 
     def save_pipeline_data(self):
@@ -79,7 +82,7 @@ class PipelineManager:
         raise Exception(f"Unimplemented method called: {current_method}")
     
 
-    def test_pipeline_manager_functionality(self): # TODO: Remove this method on finishing base functionality of PipelineManager.
+    def test_new_pipeline_data_functionality(self): # TODO: Remove this method on finishing base functionality of PipelineManager.
         self.reload_pipeline_data()
 
         self.pipeline_data_model.add_pipeline("New pipeline")
@@ -107,3 +110,11 @@ class PipelineManager:
         test_pipeline3 = self.pipeline_data_model.get_pipeline("New pipeline (3)")
         
         print(test_pipeline3.name)
+
+        self.pipeline_data_io.write_pipeline_data_to_active_project(self._pipeline_data)
+    
+
+    def test_pipeline_data_loading(self):
+        self.reload_pipeline_data()
+
+        print(self.pipeline_data_model.get_pipeline_names_list())
