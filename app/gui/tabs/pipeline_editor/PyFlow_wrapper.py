@@ -31,4 +31,4 @@ class PyFlowWrapper(QWidget):
     def _setup_pyflow(self, parent: QWidget|None=None):
         self.pyflow_instance = PyFlow.instance(parent, self.SOFTWARE)
 
-        self.pyflow_instance.setMenuBar(None)
+        # self.pyflow_instance.setMenuBar(None)

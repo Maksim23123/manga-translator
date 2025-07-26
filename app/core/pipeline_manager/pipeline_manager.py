@@ -36,12 +36,6 @@ class PipelineManager:
 
         self.reload_pipeline_data()
 
-        # Test
-
-        self.test_new_pipeline_data_functionality()
-
-        # self.test_pipeline_data_loading()
-
 
     def _connect_to_events(self):
         self.event_bus.activeProjectChanged.connect(self.reload_pipeline_data)
@@ -79,44 +73,3 @@ class PipelineManager:
         """
         if self._pipeline_data:
             self.pipeline_data_io.write_pipeline_data_to_active_project(self._pipeline_data)
-    
-
-    def test_new_pipeline_data_functionality(self): # TODO: Remove this method on finishing base functionality of PipelineManager.
-        self.reload_pipeline_data()
-
-        self.pipeline_data_model.add_pipeline("New pipeline")
-        test_pipeline1 = self.pipeline_data_model.add_pipeline("New pipeline")
-        test_pipeline2 = self.pipeline_data_model.add_pipeline("New pipeline")
-        self.pipeline_data_model.add_pipeline("New pipeline")
-
-        try:
-            self.pipeline_data_model.add_pipeline("   ")
-        except:
-            print("Can't add pipeline with empty name. Got error")
-        
-
-        print(self.pipeline_data_model.get_pipeline_names_list())
-        
-        self.pipeline_data_model.remove_pipeline("New pipeline")
-        
-        print(self.pipeline_data_model.get_pipeline_names_list())
-
-        test_pipeline1.name = "New pipeline"
-        test_pipeline2.name = "New pipeline"
-        
-        print(self.pipeline_data_model.get_pipeline_names_list())
-
-        test_pipeline3 = self.pipeline_data_model.get_pipeline("New pipeline (3)")
-        
-        print(test_pipeline3.name)
-
-        self.pipeline_data_io.write_pipeline_data_to_active_project(self._pipeline_data)
-    
-
-    def test_pipeline_data_loading(self):
-        self.reload_pipeline_data()
-
-        if self.pipeline_data_model.initialized:
-            print(self.pipeline_data_model.get_pipeline_names_list())
-        else:
-            print("Pipeline data wasn't loaded")
