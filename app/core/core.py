@@ -3,7 +3,7 @@ from .cache_manager.cache_manager import CacheManager
 from .event_bus import EventBus
 from .context import Context
 from .unit_manager.unit_manager import UnitManager
-# from .pipeline_manager.pipeline_manager import PipelineManager
+from .pipeline_manager.pipeline_manager import PipelineManager
 
 class Core:
     def __init__(self):
@@ -12,5 +12,5 @@ class Core:
         self.cache_manager = CacheManager(self.event_bus, self.context)
         self.project_manager = ProjectManager(self.event_bus, self.context)
         self.unit_manager = UnitManager(self.event_bus, self.context)
-        # self.pipeline_manager = PipelineManager(self.event_bus, self.context)
+        self.pipeline_manager = PipelineManager(self.event_bus, self.context)
         print("Manga Translator core initialized.")
