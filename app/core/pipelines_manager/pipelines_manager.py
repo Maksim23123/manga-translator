@@ -41,6 +41,7 @@ class PipelinesManager:
 
     def _connect_to_events(self):
         self.event_bus.activeProjectChanged.connect(self.reload_pipeline_data)
+        self.own_event_bus.pipeline_data_model_event_bus.pipelineRemoved.connect(self._on_pipeline_deleted)
 
 
     @property
@@ -94,3 +95,9 @@ class PipelinesManager:
         """
         if self._pipeline_data:
             self.pipeline_data_io.write_pipeline_data_to_active_project(self._pipeline_data)
+
+
+    def _on_pipeline_deleted(self, pipeline: PipelineUnit):
+        if (self._active_pipeline 
+                and self._active_pipeline.name == pipeline.name):
+            self._active_pipeline = None

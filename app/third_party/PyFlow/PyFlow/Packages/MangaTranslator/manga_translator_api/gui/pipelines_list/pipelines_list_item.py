@@ -25,6 +25,7 @@ class PipelinesListItem(QWidget, QObject):
         super().__init__(parent)
         self.is_active = is_active
         self._item_name = item_name
+        self.event_connection = None
 
         self._setup_ui()
         self._wrap_signals()

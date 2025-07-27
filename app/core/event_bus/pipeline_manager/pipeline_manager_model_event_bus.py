@@ -6,6 +6,6 @@ from core.pipelines_manager.pipeline_unit import PipelineUnit
 
 class PipelineDataModelEventBus(QObject):
     
-    pipelineRemoved = Signal(int)
+    pipelineRemoved = Signal(PipelineUnit)
     pipelineAdded = Signal()
     pipelineUpdated = Signal(int)

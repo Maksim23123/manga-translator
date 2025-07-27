@@ -60,19 +60,27 @@ class PipelinesListController:
         item = QListWidgetItem(self.pipelines_listWidget)
         item.setSizeHint(item_widget.sizeHint())
 
-        self.pipelines_listWidget.addItem(item)
-        self.pipelines_listWidget.setItemWidget(item, item_widget)
-
         def _on_active_unit_changed(new_active: PipelineUnit):
             item_widget.set_active(item_widget.item_name == new_active.name)
 
-        self.core.event_bus.pipeline_manager_event_bus.activePipelineChanged.connect(_on_active_unit_changed)  
+        connection = self.core.event_bus.pipeline_manager_event_bus.activePipelineChanged.connect(_on_active_unit_changed)  
+
+        item_widget.event_connection = connection
 
         self.item_widget_list.append(item_widget)
 
+        self.pipelines_listWidget.addItem(item)
+        self.pipelines_listWidget.setItemWidget(item, item_widget)
+
     
     def remove_list_item(self, index):
-        self.item_widget_list.pop(index)
+        item_widget = self.item_widget_list.pop(index)
+
+        if isinstance(item_widget, PipelinesListItem):
+            connection = item_widget.event_connection
+            if connection:
+                self.core.event_bus.pipeline_manager_event_bus.activePipelineChanged.disconnect(connection)
+            
         item = self.pipelines_listWidget.takeItem(index)
         del item
     
@@ -107,8 +115,11 @@ class PipelinesListController:
             self._add_list_item(pipelines_names[-1])
     
 
-    def _on_pipeline_removed(self, index: int):
-        self.remove_list_item(index)
+    def _on_pipeline_removed(self, pipeline: PipelineUnit):
+        for i, item_widget in enumerate(self.item_widget_list):
+            if (isinstance(item_widget, PipelinesListItem) 
+                    and item_widget.item_name == pipeline.name):
+                self.remove_list_item(i)
     
 
     def _on_item_selection_changed(self):

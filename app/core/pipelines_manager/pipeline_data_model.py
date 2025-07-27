@@ -58,9 +58,8 @@ class PipelineDataModel:
                 break
         
         if pipeline_to_remove:
-            pipeline_index = self._pipeline_data.pipelines_list.index(pipeline_to_remove)
             self._pipeline_data.pipelines_list.remove(pipeline_to_remove)
-            self.own_event_bus.pipelineRemoved.emit(pipeline_index)
+            self.own_event_bus.pipelineRemoved.emit(pipeline_to_remove)
             return True
         else:
             return False
