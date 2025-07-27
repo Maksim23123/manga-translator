@@ -3,7 +3,7 @@ from .cache_manager.cache_manager import CacheManager
 from .event_bus import EventBus
 from .context import Context
 from .unit_manager.unit_manager import UnitManager
-from .pipeline_manager.pipeline_manager import PipelineManager
+from .pipelines_manager.pipelines_manager import PipelinesManager
 
 import threading
 
@@ -28,6 +28,7 @@ class Core:
             self.cache_manager = CacheManager(self.event_bus, self.context)
             self.project_manager = ProjectManager(self.event_bus, self.context)
             self.unit_manager = UnitManager(self.event_bus, self.context)
-            self.pipeline_manager = PipelineManager(self.event_bus, self.context)
+            self.pipelines_manager = PipelinesManager(self.event_bus, self.context)
 
+            Core._initialized = True
             print("Manga Translator core initialized.")

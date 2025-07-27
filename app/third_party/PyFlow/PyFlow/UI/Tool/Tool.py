@@ -140,7 +140,7 @@ class ShelfTool(ToolBase):
         return QtGui.QIcon.fromTheme("go-home")
 
     def do(self):
-        print(self.name(), "called!", self.canvas)  # TODO: there is no 'canvas' yet
+        print(self.name(), "called!")  # TODO: there is no 'canvas' yet
 
 class FormTool(QtWidgets.QMdiSubWindow, ToolBase):
     """Base class for form tools

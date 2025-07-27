@@ -23,3 +23,6 @@ class PipelinesList(QWidget):
     def _setup_ui(self):
         self.ui = Ui_PipelinesList()
         self.ui.setupUi(self)
+
+        self.pipelines_list_listWidget = self.ui.pipelines_list_listWidget
+        self.new_pipeline_toolButton = self.ui.new_pipeline_toolButton

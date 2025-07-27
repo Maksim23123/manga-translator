@@ -16,10 +16,11 @@ from core.context import Context
 from .pipeline_data import PipelineData
 from .pipeline_data_model import PipelineDataModel
 from .pipeline_data_io import PipelineDataIO
+from .pipeline_unit import PipelineUnit
 
 
 
-class PipelineManager:
+class PipelinesManager:
     """
     This class supposed to manage everything that is related to pipelines.
     """
@@ -27,7 +28,7 @@ class PipelineManager:
         self.context = context
         self.event_bus = event_bus
         self._pipeline_data = None # Object that holds list of pipelines in the project.
-        self.active_pipeline = None # Holds referece to currently active pipeline.
+        self._active_pipeline = None # Holds referece to currently active pipeline.
         
         self.pipeline_data_io = PipelineDataIO(self.context)
         self.pipeline_data_model = PipelineDataModel()
@@ -35,10 +36,15 @@ class PipelineManager:
         self._connect_to_events()
 
         self.reload_pipeline_data()
-
+    
 
     def _connect_to_events(self):
         self.event_bus.activeProjectChanged.connect(self.reload_pipeline_data)
+
+
+    @property
+    def active_pipeline(self) -> PipelineUnit|None:
+        return self._active_pipeline
 
     
     def clear(self):
@@ -49,7 +55,7 @@ class PipelineManager:
         """
 
         self._pipeline_data = None
-        self.active_pipeline = None
+        self._active_pipeline = None
 
 
     def reload_pipeline_data(self): # TODO: Write me
