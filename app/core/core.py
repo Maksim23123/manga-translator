@@ -5,12 +5,29 @@ from .context import Context
 from .unit_manager.unit_manager import UnitManager
 from .pipeline_manager.pipeline_manager import PipelineManager
 
+import threading
+
+# TODO: Make this class a proper singleton (Use method with __new__)
 class Core:
+
+    _instance = None
+    _initialized = False
+    _lock = threading.Lock()
+
+    def __new__(cls):
+        with cls._lock:
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+        return cls._instance
+
+
     def __init__(self):
-        self.event_bus = EventBus()
-        self.context = Context()
-        self.cache_manager = CacheManager(self.event_bus, self.context)
-        self.project_manager = ProjectManager(self.event_bus, self.context)
-        self.unit_manager = UnitManager(self.event_bus, self.context)
-        self.pipeline_manager = PipelineManager(self.event_bus, self.context)
-        print("Manga Translator core initialized.")
+        if not Core._initialized:
+            self.event_bus = EventBus()
+            self.context = Context()
+            self.cache_manager = CacheManager(self.event_bus, self.context)
+            self.project_manager = ProjectManager(self.event_bus, self.context)
+            self.unit_manager = UnitManager(self.event_bus, self.context)
+            self.pipeline_manager = PipelineManager(self.event_bus, self.context)
+
+            print("Manga Translator core initialized.")

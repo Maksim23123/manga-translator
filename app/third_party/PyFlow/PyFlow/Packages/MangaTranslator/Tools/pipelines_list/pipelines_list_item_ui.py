@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'pipelinesListItemcacTeD.ui'
+## Form generated from reading UI file 'pipelinesListItemMeXngU.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.1
 ##
@@ -62,8 +62,8 @@ class Ui_PipelinesListItem(object):
 
     def retranslateUi(self, PipelinesListItem):
         PipelinesListItem.setWindowTitle(QCoreApplication.translate("PipelinesListItem", u"Form", None))
-        self.pipeline_name_label.setText(QCoreApplication.translate("PipelinesListItem", u"[pipeline name]", None))
-        self.pipeline_status_label.setText(QCoreApplication.translate("PipelinesListItem", u"[status]", None))
+        self.pipeline_name_label.setText("")
+        self.pipeline_status_label.setText("")
         self.delete_pipeline_toolButton.setText(QCoreApplication.translate("PipelinesListItem", u"...", None))
     # retranslateUi
 

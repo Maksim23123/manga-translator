@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="pipeline_name_label">
        <property name="text">
-        <string>[pipeline name]</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -33,7 +33,7 @@
      <item>
       <widget class="QLabel" name="pipeline_status_label">
        <property name="text">
-        <string>[status]</string>
+        <string/>
        </property>
       </widget>
      </item>
