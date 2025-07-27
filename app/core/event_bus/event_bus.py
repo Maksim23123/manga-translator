@@ -1,0 +1,16 @@
+from PySide6.QtCore import QObject, Signal
+
+from .pipeline_manager.pipeline_manager_event_bus import PipelineManagerEventBus
+
+
+
+class EventBus(QObject):
+    activeProjectChanged = Signal(str)      # e.g. path to opened project
+    unitsUpdated = Signal()
+    activeUnitUpdated = Signal()
+    activeUnitChanged = Signal()
+
+    def __init__(self):
+        super().__init__()
+
+        self.pipeline_manager_event_bus = PipelineManagerEventBus()

@@ -11,7 +11,7 @@
 import inspect
 import os
 
-from core.event_bus import EventBus
+from core.event_bus.event_bus import EventBus
 from core.context import Context
 from .pipeline_data import PipelineData
 from .pipeline_data_model import PipelineDataModel
@@ -27,11 +27,12 @@ class PipelinesManager:
     def __init__(self, event_bus: EventBus, context: Context):
         self.context = context
         self.event_bus = event_bus
+        self.own_event_bus = event_bus.pipeline_manager_event_bus
         self._pipeline_data = None # Object that holds list of pipelines in the project.
         self._active_pipeline = None # Holds referece to currently active pipeline.
         
         self.pipeline_data_io = PipelineDataIO(self.context)
-        self.pipeline_data_model = PipelineDataModel()
+        self.pipeline_data_model = PipelineDataModel(self.event_bus)
         
         self._connect_to_events()
 

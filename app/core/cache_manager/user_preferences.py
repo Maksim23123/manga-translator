@@ -1,5 +1,5 @@
 from PySide6.QtCore import QSettings
-from ..event_bus import EventBus
+from ..event_bus.event_bus import EventBus
 from ..context import Context
 
 class UserPreferences:

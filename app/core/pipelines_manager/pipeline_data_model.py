@@ -1,11 +1,15 @@
 import inspect
+
+from core.event_bus.event_bus import EventBus
+
 from .pipeline_data import PipelineData
 from .pipeline_unit import PipelineUnit
 
 
 
 class PipelineDataModel:
-    def __init__(self):
+    def __init__(self, event_bus: EventBus):
+        self.own_event_bus = event_bus.pipeline_manager_event_bus.pipeline_data_model_event_bus
         self._pipeline_data = None
 
     
@@ -54,7 +58,9 @@ class PipelineDataModel:
                 break
         
         if pipeline_to_remove:
+            pipeline_index = self._pipeline_data.pipelines_list.index(pipeline_to_remove)
             self._pipeline_data.pipelines_list.remove(pipeline_to_remove)
+            self.own_event_bus.pipelineRemoved.emit(pipeline_index)
             return True
         else:
             return False
@@ -80,6 +86,8 @@ class PipelineDataModel:
         new_pipeline.add_on_change_callable(self._on_pipeline_updated)
 
         self._pipeline_data.pipelines_list.append(new_pipeline)
+
+        self.own_event_bus.pipelineAdded.emit()
 
         return new_pipeline
     

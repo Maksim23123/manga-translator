@@ -1,4 +1,4 @@
-from ..event_bus import EventBus
+from ..event_bus.event_bus import EventBus
 from ..context import Context
 import os
 import json

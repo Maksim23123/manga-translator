@@ -2,7 +2,7 @@ import os
 import json
 from datetime import datetime
 from .project import Project
-from ..event_bus import EventBus
+from ..event_bus.event_bus import EventBus
 from ..cache_manager.cache_manager import CacheManager
 from ..context import Context 
 

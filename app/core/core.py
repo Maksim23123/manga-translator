@@ -1,6 +1,6 @@
 from .project_manager.project_manager import ProjectManager
 from .cache_manager.cache_manager import CacheManager
-from .event_bus import EventBus
+from .event_bus.event_bus import EventBus
 from .context import Context
 from .unit_manager.unit_manager import UnitManager
 from .pipelines_manager.pipelines_manager import PipelinesManager

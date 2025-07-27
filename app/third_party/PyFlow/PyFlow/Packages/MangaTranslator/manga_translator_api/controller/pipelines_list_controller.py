@@ -26,6 +26,11 @@ class PipelinesListController:
 
     def _connect_to_events(self):
         self.core.event_bus.activeProjectChanged.connect(self.update_list_widget)
+
+        pipelines_model_event_bus = self.core.event_bus.pipeline_manager_event_bus.pipeline_data_model_event_bus
+
+        pipelines_model_event_bus.pipelineAdded.connect(self._on_new_pipeline_added)
+        pipelines_model_event_bus.pipelineRemoved.connect(self._on_pipeline_removed)
     
 
     def _connect_controller(self):
@@ -46,6 +51,7 @@ class PipelinesListController:
 
     def _add_list_item(self, item_name: str, is_active: bool=False):
         item_widget = PipelinesListItem(item_name, is_active, self.pipelines_list)
+        item_widget.deletePipelineTriggered.connect(self._on_remove_button_clicked)
 
         listWidget =  self.pipelines_list.pipelines_list_listWidget
 
@@ -57,6 +63,23 @@ class PipelinesListController:
         listWidget.setItemWidget(item, item_widget)
 
         self.item_widget_list.append(item_widget)
+
+    
+    def remove_list_item(self, index):
+        self.item_widget_list.pop(index)
+
+        listWidget =  self.pipelines_list.pipelines_list_listWidget
+        listWidget.takeItem(index)
+    
+
+    def _on_remove_button_clicked(self, pipeline_name: str):
+        if not pipeline_name is None:
+            try:
+                success = self.pipelines_model.remove_pipeline(pipeline_name)
+                if not success:
+                    print("Failed to remove pipeline")
+            except Exception as e:
+                print(f"Error removing pipeline '{pipeline_name}': {e}")
     
 
     def _on_new_pipeline_button_clicked(self):
@@ -67,4 +90,15 @@ class PipelinesListController:
         if result and self.pipelines_model.initialized:
             new_pipeline_name = new_pipeline_dialog.pipeline_name
             self.pipelines_model.add_pipeline(new_pipeline_name)
+    
+
+    def _on_new_pipeline_added(self):
+        pipelines_names = self.pipelines_model.get_pipeline_names_list()
+
+        if pipelines_names:
+            self._add_list_item(pipelines_names[-1])
+    
+
+    def _on_pipeline_removed(self, index: int):
+        self.remove_list_item(index)
 

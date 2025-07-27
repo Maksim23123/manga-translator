@@ -1,5 +1,5 @@
 from .user_preferences import UserPreferences
-from ..event_bus import EventBus
+from ..event_bus.event_bus import EventBus
 from ..context import Context
 
 class CacheManager:
