@@ -47,6 +47,20 @@ class PipelinesManager:
     def active_pipeline(self) -> PipelineUnit|None:
         return self._active_pipeline
 
+
+    def set_active_pipeline(self, pipeline_name: str) -> bool:
+        if not self.pipeline_data_model.initialized:
+            return False
+        
+        new_active_pipeline = self.pipeline_data_model.get_pipeline(pipeline_name)
+
+        if new_active_pipeline:
+            self._active_pipeline = new_active_pipeline
+            self.own_event_bus.activePipelineChanged.emit(self.active_pipeline)
+            return True
+        
+        return False
+
     
     def clear(self):
         """

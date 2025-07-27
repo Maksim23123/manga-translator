@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (QApplication, QHBoxLayout, QListWidget, QListWidg
 from .pipelines_list_item_ui import Ui_PipelinesListItem
 
 
+
 class PipelinesListItem(QWidget, QObject):
 
     ACTIVE_ITEM_MARK = "active"
@@ -23,12 +24,12 @@ class PipelinesListItem(QWidget, QObject):
     def __init__(self, item_name: str, is_active: bool=False, parent: QWidget|None=None):
         super().__init__(parent)
         self.is_active = is_active
-        self.item_name = item_name
+        self._item_name = item_name
 
         self._setup_ui()
         self._wrap_signals()
 
-        self.pipeline_name_label.setText(self.item_name)
+        self.pipeline_name_label.setText(self._item_name)
 
         self.set_active(is_active)
     
@@ -46,10 +47,15 @@ class PipelinesListItem(QWidget, QObject):
         self.delete_pipeline_toolButton = self.ui.delete_pipeline_toolButton
     
 
+    @property
+    def item_name(self):
+        return self._item_name
+
+
     def set_active(self, is_active: bool=False):
         status_label_text = self.ACTIVE_ITEM_MARK if is_active else ""
         self.pipeline_status_label.setText(status_label_text)
     
 
     def _on_delete_pipeline(self):
-        self.deletePipelineTriggered.emit(self.item_name)
+        self.deletePipelineTriggered.emit(self._item_name)

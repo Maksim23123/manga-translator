@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QApplication, 
-    QMainWindow, QMenuBar, QMenu, QTabWidget, QLabel, QListWidgetItem, QAbstractItemView
+    QMainWindow, QMenuBar, QMenu, QTabWidget, QLabel, QListWidgetItem, QAbstractItemView, QMessageBox
 )
 from core.core import Core
+from core.pipelines_manager.pipeline_unit import PipelineUnit
 from ..gui.pipelines_list.pipelines_list import PipelinesList
 from ..gui.pipelines_list.pipelines_list_item import PipelinesListItem
 from ..gui.pipelines_list.new_pipeline_dialog import NewPipelineDialog
@@ -15,6 +16,7 @@ class PipelinesListController:
 
     def __init__(self, pipelines_list: PipelinesList):
         self.pipelines_list = pipelines_list
+        self.pipelines_listWidget = self.pipelines_list.pipelines_list_listWidget
         self.core = Core()
         self.pipelines_model = self.core.pipelines_manager.pipeline_data_model
         self.item_widget_list = list()
@@ -35,6 +37,7 @@ class PipelinesListController:
 
     def _connect_controller(self):
         self.pipelines_list.new_pipeline_toolButton.clicked.connect(self._on_new_pipeline_button_clicked)
+        self.pipelines_list.pipelines_list_listWidget.itemSelectionChanged.connect(self._on_item_selection_changed)
 
 
     def update_list_widget(self):
@@ -53,23 +56,25 @@ class PipelinesListController:
         item_widget = PipelinesListItem(item_name, is_active, self.pipelines_list)
         item_widget.deletePipelineTriggered.connect(self._on_remove_button_clicked)
 
-        listWidget =  self.pipelines_list.pipelines_list_listWidget
-
         # Create a placeholder item
-        item = QListWidgetItem(listWidget)
+        item = QListWidgetItem(self.pipelines_listWidget)
         item.setSizeHint(item_widget.sizeHint())
 
-        listWidget.addItem(item)
-        listWidget.setItemWidget(item, item_widget)
+        self.pipelines_listWidget.addItem(item)
+        self.pipelines_listWidget.setItemWidget(item, item_widget)
+
+        def _on_active_unit_changed(new_active: PipelineUnit):
+            item_widget.set_active(item_widget.item_name == new_active.name)
+
+        self.core.event_bus.pipeline_manager_event_bus.activePipelineChanged.connect(_on_active_unit_changed)  
 
         self.item_widget_list.append(item_widget)
 
     
     def remove_list_item(self, index):
         self.item_widget_list.pop(index)
-
-        listWidget =  self.pipelines_list.pipelines_list_listWidget
-        listWidget.takeItem(index)
+        item = self.pipelines_listWidget.takeItem(index)
+        del item
     
 
     def _on_remove_button_clicked(self, pipeline_name: str):
@@ -89,8 +94,11 @@ class PipelinesListController:
 
         if result and self.pipelines_model.initialized:
             new_pipeline_name = new_pipeline_dialog.pipeline_name
-            self.pipelines_model.add_pipeline(new_pipeline_name)
-    
+            try:
+                self.pipelines_model.add_pipeline(new_pipeline_name)
+            except Exception as e:
+                QMessageBox.warning(self.pipelines_list, "Failed to create pipeline", str(e))
+
 
     def _on_new_pipeline_added(self):
         pipelines_names = self.pipelines_model.get_pipeline_names_list()
@@ -101,4 +109,20 @@ class PipelinesListController:
 
     def _on_pipeline_removed(self, index: int):
         self.remove_list_item(index)
+    
+
+    def _on_item_selection_changed(self):
+        selected_items = self.pipelines_listWidget.selectedItems()
+
+        if not selected_items:
+            return
+        
+        selected_item = selected_items[0]
+
+        item_widget = self.pipelines_listWidget.itemWidget(selected_item)
+
+        if isinstance(item_widget, PipelinesListItem):
+            self.core.pipelines_manager.set_active_pipeline(item_widget.item_name)
+        else:
+            raise Exception(f"Item widget expeted to be of a type '{PipelinesList.__name__}', got '{type(item_widget).__name__}'")
 
