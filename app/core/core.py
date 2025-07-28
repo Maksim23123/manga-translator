@@ -4,6 +4,7 @@ from .event_bus.event_bus import EventBus
 from .context import Context
 from .unit_manager.unit_manager import UnitManager
 from .pipelines_manager.pipelines_manager import PipelinesManager
+from .state_persistance_manager import StatePersistanceManager
 
 import threading
 
@@ -25,10 +26,13 @@ class Core:
         if not Core._initialized:
             self.event_bus = EventBus()
             self.context = Context()
+            self.state_persistance_manager = StatePersistanceManager(self.event_bus)
+            self.context.state_persistance_manager = self.state_persistance_manager
             self.cache_manager = CacheManager(self.event_bus, self.context)
             self.project_manager = ProjectManager(self.event_bus, self.context)
             self.unit_manager = UnitManager(self.event_bus, self.context)
             self.pipelines_manager = PipelinesManager(self.event_bus, self.context)
+            
 
             Core._initialized = True
             print("Manga Translator core initialized.")

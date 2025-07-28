@@ -12,6 +12,7 @@ from gui.tabs.pipeline_editor.PyFlow_wrapper import PyFlowWrapper
 
 class ProjectWindow(QMainWindow):
     WINDOW_NAME_PREFIX = "Manga Translator"
+    PROJECT_STATUS_WINDOW_NAME_SUFIX = "*"
 
 
     def __init__(self, core: Core):
@@ -20,11 +21,16 @@ class ProjectWindow(QMainWindow):
 
         self._init_window_settings()
         
+        self._connect_to_events()
         self._init_gui_elements()
+    
+
+    def _connect_to_events(self):
+        self.core.event_bus.activeProjectChanged.connect(self._update_window_name)
+        self.core.event_bus.state_persistance_manager_event_bus.projectDataStateChanged.connect(self._update_window_name)
 
     
     def _init_window_settings(self):
-        self.core.event_bus.activeProjectChanged.connect(self._update_window_name)
         self._update_window_name()
 
         self.resize(1000, 700)
@@ -35,8 +41,12 @@ class ProjectWindow(QMainWindow):
 
         active_project = self.core.project_manager.active_project
 
+        project_changed = self.core.state_persistance_manager.data_modified
+
         if active_project:
-            new_window_name = f"{new_window_name} - {active_project.project_name}"
+            new_window_name = f"{new_window_name} - {active_project.project_name} {
+                self.PROJECT_STATUS_WINDOW_NAME_SUFIX if project_changed else ""
+            }"
 
         self.setWindowTitle(new_window_name)
 
@@ -57,7 +67,8 @@ class ProjectWindow(QMainWindow):
         
         self.file_menu_actions = {
             "open_project": QAction("Open project", self),
-            "new_project": QAction("New project", self)
+            "new_project": QAction("New project", self),
+            "save_project": QAction("Save", self)
         }
         
         for action in self.file_menu_actions.values():

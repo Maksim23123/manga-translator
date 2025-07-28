@@ -32,7 +32,7 @@ class PipelinesManager:
         self._active_pipeline = None # Holds referece to currently active pipeline.
         
         self.pipeline_data_io = PipelineDataIO(self.context)
-        self.pipeline_data_model = PipelineDataModel(self.event_bus)
+        self.pipeline_data_model = PipelineDataModel(self.event_bus, context)
         
         self._connect_to_events()
 
@@ -42,6 +42,7 @@ class PipelinesManager:
     def _connect_to_events(self):
         self.event_bus.activeProjectChanged.connect(self.reload_pipeline_data)
         self.own_event_bus.pipeline_data_model_event_bus.pipelineRemoved.connect(self._on_pipeline_deleted)
+        self.event_bus.state_persistance_manager_event_bus.writeStateRequested.connect(self.save_pipeline_data)
 
 
     @property

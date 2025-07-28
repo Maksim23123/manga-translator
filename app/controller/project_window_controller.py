@@ -15,6 +15,7 @@ class ProjectWindowController:
     def _connect_controller(self):
         self.project_window.file_menu_actions["open_project"].triggered.connect(self._open_project_triggered)
         self.project_window.file_menu_actions["new_project"].triggered.connect(self._new_project_triggered)
+        self.project_window.file_menu_actions["save_project"].triggered.connect(self._save_project_triggered)
 
 
     def _open_project_triggered(self):
@@ -39,6 +40,10 @@ class ProjectWindowController:
         project_creator = ProjectCreator(parent=self.project_window, default_directory=base_path)
         controller = ProjectCreatorController(project_creator, self.core.project_manager)
         project_creator.exec()
+    
+
+    def _save_project_triggered(self):
+        self.core.state_persistance_manager.save_project_data()
 
         
 
