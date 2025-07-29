@@ -51,6 +51,12 @@ class PipelinesListItem(QWidget, QObject):
     @property
     def item_name(self):
         return self._item_name
+    
+
+    @item_name.setter
+    def item_name(self, value: str):
+        self._item_name = value
+        self.pipeline_name_label.setText(self._item_name)
 
 
     def set_active(self, is_active: bool=False):

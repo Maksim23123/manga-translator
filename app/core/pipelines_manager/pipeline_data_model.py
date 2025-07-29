@@ -49,8 +49,11 @@ class PipelineDataModel:
             new_pipeline_name = self.generate_unique_pipeline_name(old_name)
             pipeline.name = new_pipeline_name
             print(f"Warning: Pipeline name should be unique. Name \"{old_name}\" changed to \"{pipeline.name}\"")
+        
+        index = self._pipeline_data.pipelines_list.index(pipeline)
 
         self.project_state_manager.notify_data_modified()
+        self.own_event_bus.pipelineUpdated.emit(index)
     
     def remove_pipeline(self, pipeline_name: str) -> bool:
         self._check_pipeline_data()

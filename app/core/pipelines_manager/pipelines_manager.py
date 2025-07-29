@@ -1,4 +1,4 @@
-# TODO: This will do next:
+# This will do next:
 #   1. Hold list of all loaded piplines(implement lazy load). Also the same object will store pipeline data project wide. 
 #       This object will hold references to all piplines in the project and will be serializable. 
 #       Class name for that object will be PipelineData.
@@ -8,7 +8,6 @@
 #   4. Hold object that will handle pipelineData persistance between projects. It will write PipelineData to files and read 
 #       it for further usage. Class name of that object is PipelineDataIO
 
-import inspect
 import os
 
 from core.event_bus.event_bus import EventBus
@@ -75,7 +74,7 @@ class PipelinesManager:
         self._active_pipeline = None
 
 
-    def reload_pipeline_data(self): # TODO: Write me
+    def reload_pipeline_data(self):
         """
         Supposed to be used on project change. It loads pipline data
         of current active project.

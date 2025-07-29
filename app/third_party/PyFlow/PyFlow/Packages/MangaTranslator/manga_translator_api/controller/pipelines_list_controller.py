@@ -33,6 +33,7 @@ class PipelinesListController:
 
         pipelines_model_event_bus.pipelineAdded.connect(self._on_new_pipeline_added)
         pipelines_model_event_bus.pipelineRemoved.connect(self._on_pipeline_removed)
+        pipelines_model_event_bus.pipelineUpdated.connect(self._on_pipeline_updated)
     
 
     def _connect_controller(self):
@@ -120,6 +121,14 @@ class PipelinesListController:
             if (isinstance(item_widget, PipelinesListItem) 
                     and item_widget.item_name == pipeline.name):
                 self.remove_list_item(i)
+    
+
+    def _on_pipeline_updated(self, index):
+        new_name = self.pipelines_model.get_pipeline_names_list()[index]
+        item_widget = self.item_widget_list[index]
+
+        if item_widget and isinstance(item_widget, PipelinesListItem):
+            item_widget.item_name = new_name 
     
 
     def _on_item_selection_changed(self):
