@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (QApplication, QDockWidget, QHBoxLayout, QLabel,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 from PyFlow.App import PyFlow
 from PyFlow.UI.Canvas.UICommon import SessionDescriptor
+from PyFlow.UI.Tool.Tool import ShelfTool, ToolBase
 from core.core import Core
 
 
@@ -33,4 +34,18 @@ class PyFlowWrapper(QWidget):
     def _setup_pyflow(self):
         self.pyflow_instance = self.core.pipelines_manager.pyflow_instance
 
-        # self.pyflow_instance.setMenuBar(None)
+        # Remove empty shelf tools
+        shelf_tool_example_instance = ShelfTool()
+
+        #   Unrefgister empty shelf tools
+        empty_shelf_tools = [instance for instance in self.pyflow_instance.getRegisteredTools() 
+                             if type(instance).__name__ == type(shelf_tool_example_instance).__name__]
+        for empty_shelf_tool in empty_shelf_tools:
+            self.pyflow_instance.unregisterToolInstance(empty_shelf_tool)
+
+        #   Remove empty shelftool actions
+        tool_bar = self.pyflow_instance.getToolbar()
+        tool_bar_actions = tool_bar.actions()
+        empty_tool_actions = [action for action in tool_bar_actions if action.text() == shelf_tool_example_instance.name()]
+        for empty_tool_action in empty_tool_actions:
+            tool_bar.removeAction(empty_tool_action)
