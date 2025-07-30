@@ -2,6 +2,7 @@ from core.core import Core
 from gui.gui import GUI
 from .project_window_controller import ProjectWindowController
 from .unit_composer_controller.unit_composer_controller import UnitComposerController
+from .pyflow_wrapper_controller.PyFlow_wrapper_controller import PyFlowWrapperController
 
 class Contorller:
     def __init__(self, core: Core, gui: GUI):
@@ -14,3 +15,4 @@ class Contorller:
     def init_controllers(self):
         self.project_window_controller = ProjectWindowController(self.core, self.gui.project_window)
         self.unit_composer_controller = UnitComposerController(self.core, self.gui.project_window.unit_composer)
+        self.pyflow_wrapper_controller = PyFlowWrapperController(self.gui.project_window.pipline_editor)

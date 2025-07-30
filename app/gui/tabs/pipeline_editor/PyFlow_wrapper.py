@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (QApplication, QDockWidget, QHBoxLayout, QLabel,
     QLineEdit, QListView, QMainWindow, QPushButton,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 from PyFlow.App import PyFlow
+from PyFlow.Packages.MangaTranslator.Tools.PreviewShelfTool import PreviewShelfTool
 from PyFlow.UI.Canvas.UICommon import SessionDescriptor
 from PyFlow.UI.Tool.Tool import ShelfTool, ToolBase
 from core.core import Core
@@ -49,3 +50,15 @@ class PyFlowWrapper(QWidget):
         empty_tool_actions = [action for action in tool_bar_actions if action.text() == shelf_tool_example_instance.name()]
         for empty_tool_action in empty_tool_actions:
             tool_bar.removeAction(empty_tool_action)
+        
+
+        # Expose tools from MangaTranslator package for interaction
+        
+        pyflow_tools = self.pyflow_instance.getRegisteredTools()
+
+        self.preview_shelf_tool = None
+
+        for tool in pyflow_tools:
+            if str(type(tool)) == str(PreviewShelfTool):
+                self.preview_shelf_tool = tool
+                print("check")
