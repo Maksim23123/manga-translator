@@ -10,6 +10,9 @@ from PySide6.QtWidgets import (QApplication, QDockWidget, QHBoxLayout, QLabel,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 from PyFlow.App import PyFlow
 from PyFlow.UI.Canvas.UICommon import SessionDescriptor
+from core.core import Core
+
+
 
 class PyFlowWrapper(QWidget):
 
@@ -17,7 +20,7 @@ class PyFlowWrapper(QWidget):
 
     def __init__(self, parent: QWidget|None=None):
         super().__init__(parent)
-        
+        self.core = Core()
 
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
@@ -27,8 +30,7 @@ class PyFlowWrapper(QWidget):
         self.main_layout.addWidget(self.pyflow_instance)
 
     
-
-    def _setup_pyflow(self, parent: QWidget|None=None):
-        self.pyflow_instance = PyFlow.instance(parent, self.SOFTWARE)
+    def _setup_pyflow(self):
+        self.pyflow_instance = self.core.pipelines_manager.pyflow_instance
 
         # self.pyflow_instance.setMenuBar(None)

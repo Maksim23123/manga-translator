@@ -9,6 +9,7 @@
 #       it for further usage. Class name of that object is PipelineDataIO
 
 import os
+from PyFlow.App import PyFlow
 
 from core.event_bus.event_bus import EventBus
 from core.context import Context
@@ -16,6 +17,7 @@ from .pipeline_data import PipelineData
 from .pipeline_data_model import PipelineDataModel
 from .pipeline_data_io import PipelineDataIO
 from .pipeline_unit import PipelineUnit
+from .PyFlow_interaction_manager import PyFlowInteractionManager
 
 
 
@@ -23,12 +25,15 @@ class PipelinesManager:
     """
     This class supposed to manage everything that is related to pipelines.
     """
+
     def __init__(self, event_bus: EventBus, context: Context):
         self.context = context
         self.event_bus = event_bus
         self.own_event_bus = event_bus.pipeline_manager_event_bus
         self._pipeline_data = None # Object that holds list of pipelines in the project.
         self._active_pipeline = None # Holds referece to currently active pipeline.
+
+        self._pyflow_interaction_manager = PyFlowInteractionManager()
         
         self.pipeline_data_io = PipelineDataIO(self.context)
         self.pipeline_data_model = PipelineDataModel(self.event_bus, context)
@@ -47,6 +52,11 @@ class PipelinesManager:
     @property
     def active_pipeline(self) -> PipelineUnit|None:
         return self._active_pipeline
+    
+
+    @property
+    def pyflow_instance(self) -> PyFlow:
+        return self._pyflow_interaction_manager.pyflow_instance
 
 
     def set_active_pipeline(self, pipeline_name: str) -> bool:
@@ -56,6 +66,9 @@ class PipelinesManager:
         new_active_pipeline = self.pipeline_data_model.get_pipeline(pipeline_name)
 
         if new_active_pipeline:
+
+            self.pyflow_instance.newFile()
+
             self._active_pipeline = new_active_pipeline
             self.own_event_bus.activePipelineChanged.emit(self.active_pipeline)
             return True
