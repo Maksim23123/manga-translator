@@ -1,5 +1,4 @@
 import os
-import shutil
 
 from .user_preferences import UserPreferences
 from ..event_bus.event_bus import EventBus
@@ -10,7 +9,7 @@ class CacheManager:
         self.event_bus = event_bus
         self.context = context
         self.user_preferences = UserPreferences(self.event_bus, self.context)
-        
+
         self._connect_to_events()
 
 
@@ -19,7 +18,7 @@ class CacheManager:
 
     
     def _clear_on_project_save(self):
-        files_to_clean_up = self.context.files_to_clean_up_list
+        files_to_clean_up = self.context.files_to_clean_up_set
 
         for file_path in files_to_clean_up:
             if isinstance(file_path, str) and os.path.exists(file_path):

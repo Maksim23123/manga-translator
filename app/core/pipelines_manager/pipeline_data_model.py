@@ -69,7 +69,7 @@ class PipelineDataModel:
             self._pipeline_data.pipelines_list.remove(pipeline_to_remove)
             graph_path = pipeline_to_remove.graph_path
             if graph_path:
-                self.context.files_to_clean_up_list.append(graph_path)
+                self.context.files_to_clean_up_set.add(graph_path)
             self.own_event_bus.pipelineRemoved.emit(pipeline_to_remove)
             self.project_state_manager.notify_data_modified()
             return True

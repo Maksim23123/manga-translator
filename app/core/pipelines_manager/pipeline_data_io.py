@@ -4,11 +4,12 @@ import json
 from core.context import Context
 from .pipeline_data import PipelineData
 
+from core.routes import PIPELINES_DIR_RELATIVE_PATH
+
 
 
 class PipelineDataIO:
 
-    RELATIVE_PIPELINE_DATA_DIR_PATH = "pipelines"
     PIPELINE_DATA_FILE = "pipelines.json"
 
     def __init__(self, context: Context):
@@ -21,7 +22,7 @@ class PipelineDataIO:
         
         if project_directory:
             return os.path.join(project_directory
-                                              , self.RELATIVE_PIPELINE_DATA_DIR_PATH
+                                              , PIPELINES_DIR_RELATIVE_PATH
                                               , self.PIPELINE_DATA_FILE)
         else:
             return
@@ -32,7 +33,7 @@ class PipelineDataIO:
         
         if project_directory:
             return os.path.join(project_directory
-                                              , self.RELATIVE_PIPELINE_DATA_DIR_PATH)
+                                              , PIPELINES_DIR_RELATIVE_PATH)
         else:
             return
 

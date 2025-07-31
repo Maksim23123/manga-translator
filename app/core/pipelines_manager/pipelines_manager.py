@@ -19,12 +19,13 @@ from .pipeline_data_io import PipelineDataIO
 from .pipeline_unit import PipelineUnit
 from .PyFlow_interaction_manager import PyFlowInteractionManager
 
-
+from core.routes import PIPELINES_DIR_RELATIVE_PATH
 
 class PipelinesManager:
     """
     This class supposed to manage everything that is related to pipelines.
     """
+    
 
     def __init__(self, event_bus: EventBus, context: Context):
         self.context = context
@@ -47,6 +48,35 @@ class PipelinesManager:
         self.event_bus.activeProjectChanged.connect(self.reload_pipeline_data)
         self.own_event_bus.pipeline_data_model_event_bus.pipelineRemoved.connect(self._on_pipeline_deleted)
         self.event_bus.state_persistance_manager_event_bus.writeStateRequested.connect(self.save_pipeline_data)
+
+
+    def _clean_up_pipeline_unrelated_graphs(self):
+        project_dir = self.context.active_project_directory
+
+        if not (project_dir and os.path.exists(project_dir)):
+            return
+
+        pipelines_dir = os.path.join(project_dir, PIPELINES_DIR_RELATIVE_PATH)
+
+        if not (pipelines_dir and os.path.exists(pipelines_dir)):
+            return
+
+        GRAPH_FILE_EXTENSION = "pygraph"
+
+        pipelines_dir_content = os.listdir(pipelines_dir)
+
+        graph_files_paths = [os.path.join(pipelines_dir, graph_file_name)  for graph_file_name in pipelines_dir_content 
+                             if graph_file_name.endswith(f".{GRAPH_FILE_EXTENSION}")]
+        
+        pipelines_names = self.pipeline_data_model.get_pipeline_names_list()
+        pipelines = [self.pipeline_data_model.get_pipeline(pipeline_name) 
+                     for pipeline_name in pipelines_names]
+
+        pipeline_related_graphs_paths = [pipeline.graph_path for pipeline in pipelines if pipeline.graph_path]
+        
+        for graph_path_from_dir in graph_files_paths:
+            if not graph_path_from_dir in pipeline_related_graphs_paths:
+                os.remove(graph_path_from_dir)
 
 
     @property
@@ -99,6 +129,7 @@ class PipelinesManager:
             loaded_pipeline_data = self.pipeline_data_io.load_active_project_pipeline_data()
             self._pipeline_data = loaded_pipeline_data if loaded_pipeline_data else PipelineData()
             self.pipeline_data_model.set_pipeline_data(self._pipeline_data)
+            self._clean_up_pipeline_unrelated_graphs()
     
 
     def save_pipeline_data(self):

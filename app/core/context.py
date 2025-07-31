@@ -13,12 +13,12 @@ class Context:
         self._last_active_project_directory = None
         self._state_persistance_manager = None
 
-        self._files_to_clean_up_list = list()
+        self._files_to_clean_up_set = set()
 
     
     @property
-    def files_to_clean_up_list(self):
-        return self._files_to_clean_up_list
+    def files_to_clean_up_set(self) -> set:
+        return self._files_to_clean_up_set
 
 
     @property

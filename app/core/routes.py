@@ -1,0 +1,1 @@
+PIPELINES_DIR_RELATIVE_PATH = "pipelines"

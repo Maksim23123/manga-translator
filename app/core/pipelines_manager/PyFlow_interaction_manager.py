@@ -1,11 +1,12 @@
 import os
 
 from PyFlow.App import PyFlow
-from PySide6.QtCore import QObject, Signal
 from .pipeline_unit import PipelineUnit
 
 from core.context import Context
 from core.event_bus.event_bus import EventBus
+
+from core.routes import PIPELINES_DIR_RELATIVE_PATH
 
 
 
@@ -23,8 +24,6 @@ class PyFlowInteractionManager:
     """
 
     SOFTWARE = "manga-translator"
-
-    PIPELINES_DIR_RELATIVE_PATH = "pipelines"
 
     PYFLOW_GRAPH_FILE_EXTENSION = "pygraph"
 
@@ -72,7 +71,7 @@ class PyFlowInteractionManager:
 
     def _get_unique_graph_path(self, base_file_name: str) -> str:
         project_path = self.context.active_project_directory
-        base_path = os.path.join(project_path, self.PIPELINES_DIR_RELATIVE_PATH)
+        base_path = os.path.join(project_path, PIPELINES_DIR_RELATIVE_PATH)
         unique_path = os.path.join(base_path, f"{base_file_name}.{self.PYFLOW_GRAPH_FILE_EXTENSION}" )
         sufix_index = 1
 
