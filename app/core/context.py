@@ -13,6 +13,13 @@ class Context:
         self._last_active_project_directory = None
         self._state_persistance_manager = None
 
+        self._files_to_clean_up_list = list()
+
+    
+    @property
+    def files_to_clean_up_list(self):
+        return self._files_to_clean_up_list
+
 
     @property
     def active_project_directory(self):

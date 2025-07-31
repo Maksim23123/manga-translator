@@ -1,6 +1,6 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
+    QSize, QTime, QUrl, Qt, Signal)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
@@ -16,9 +16,11 @@ from core.core import Core
 
 
 
-class PyFlowWrapper(QWidget):
+class PyFlowWrapper(QWidget, QObject):
 
     SOFTWARE = "manga-translator"
+
+    modifiedChanged = Signal(bool)
 
     def __init__(self, parent: QWidget|None=None):
         super().__init__(parent)
@@ -35,6 +37,40 @@ class PyFlowWrapper(QWidget):
     def _setup_pyflow(self):
         self.pyflow_instance = self.core.pipelines_manager.pyflow_instance
 
+        self._remove_empty_shelf_tools()
+        
+        self._pull_pyflow_tools()
+
+        self._wrap_modified_property()
+    
+
+    def _wrap_modified_property(self):
+
+        original_modified_setter = type(self.pyflow_instance).modified.fset
+
+        def modified_setter_wrapper(instance, value):
+            old_value = instance.modified
+
+            original_modified_setter(instance, value)
+
+            if old_value != value:
+                self.modifiedChanged.emit(value)
+
+        type(self.pyflow_instance).modified = type(self.pyflow_instance).modified.setter(modified_setter_wrapper)
+
+    
+    def _pull_pyflow_tools(self):
+        # Expose tools from MangaTranslator package for interaction
+        pyflow_tools = self.pyflow_instance.getRegisteredTools()
+
+        self.preview_shelf_tool = None
+
+        for tool in pyflow_tools:
+            if str(type(tool)) == str(PreviewShelfTool):
+                self.preview_shelf_tool = tool
+
+
+    def _remove_empty_shelf_tools(self):
         # Remove empty shelf tools
         shelf_tool_example_instance = ShelfTool()
 
@@ -50,14 +86,3 @@ class PyFlowWrapper(QWidget):
         empty_tool_actions = [action for action in tool_bar_actions if action.text() == shelf_tool_example_instance.name()]
         for empty_tool_action in empty_tool_actions:
             tool_bar.removeAction(empty_tool_action)
-        
-
-        # Expose tools from MangaTranslator package for interaction
-        
-        pyflow_tools = self.pyflow_instance.getRegisteredTools()
-
-        self.preview_shelf_tool = None
-
-        for tool in pyflow_tools:
-            if str(type(tool)) == str(PreviewShelfTool):
-                self.preview_shelf_tool = tool

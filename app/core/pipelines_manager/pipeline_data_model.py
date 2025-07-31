@@ -2,7 +2,6 @@ import inspect
 
 from core.event_bus.event_bus import EventBus
 from core.context import Context
-from core.state_persistance_manager import StatePersistanceManager
 
 from .pipeline_data import PipelineData
 from .pipeline_unit import PipelineUnit
@@ -11,6 +10,7 @@ from .pipeline_unit import PipelineUnit
 
 class PipelineDataModel:
     def __init__(self, event_bus: EventBus, context: Context):
+        self.context = context
         self.project_state_manager = context.state_persistance_manager
         self.own_event_bus = event_bus.pipeline_manager_event_bus.pipeline_data_model_event_bus
         self._pipeline_data = None
@@ -55,6 +55,7 @@ class PipelineDataModel:
         self.project_state_manager.notify_data_modified()
         self.own_event_bus.pipelineUpdated.emit(index)
     
+
     def remove_pipeline(self, pipeline_name: str) -> bool:
         self._check_pipeline_data()
         pipeline_to_remove = None
@@ -66,6 +67,9 @@ class PipelineDataModel:
         
         if pipeline_to_remove:
             self._pipeline_data.pipelines_list.remove(pipeline_to_remove)
+            graph_path = pipeline_to_remove.graph_path
+            if graph_path:
+                self.context.files_to_clean_up_list.append(graph_path)
             self.own_event_bus.pipelineRemoved.emit(pipeline_to_remove)
             self.project_state_manager.notify_data_modified()
             return True

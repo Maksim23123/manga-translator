@@ -5,6 +5,7 @@ from PySide6.QtCore import QObject, Signal
 from .pipeline_unit import PipelineUnit
 
 from core.context import Context
+from core.event_bus.event_bus import EventBus
 
 
 
@@ -27,10 +28,17 @@ class PyFlowInteractionManager:
 
     PYFLOW_GRAPH_FILE_EXTENSION = "pygraph"
 
-    def __init__(self, context: Context):
+    def __init__(self, event_bus: EventBus, context: Context):
         self._current_active_pipeline = None
         self.context = context
+        self.event_bus = event_bus
         self.pyflow_instance = PyFlow.instance(software=self.SOFTWARE)
+
+        self._connect_to_events()
+    
+
+    def _connect_to_events(self):
+        self.event_bus.state_persistance_manager_event_bus.writeStateRequested.connect(self.save_current_pipeline_graph)
     
 
     def set_new_active_pipeline(self, new_active_pipeline: PipelineUnit):
@@ -40,16 +48,13 @@ class PyFlowInteractionManager:
         self._current_active_pipeline = new_active_pipeline
 
         graph_path = self._current_active_pipeline.graph_path
-
-        if not graph_path:
-            self.pyflow_instance.newFile()
-            new_graph_path = self._get_unique_graph_path(self._current_active_pipeline.name)
-            self.pyflow_instance.currentFileName = new_graph_path
-        else:
+            
+        if graph_path and os.path.exists(graph_path):
             self.pyflow_instance.loadFromFile(graph_path)
+        else:
+            self.pyflow_instance.newFile()
 
     
-
     def save_current_pipeline_graph(self):
         if not os.path.exists(self.context.active_project_directory):
                 raise FileNotFoundError(f"Project directory doesn't exist.")
