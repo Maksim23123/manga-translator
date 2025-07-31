@@ -61,4 +61,3 @@ class PyFlowWrapper(QWidget):
         for tool in pyflow_tools:
             if str(type(tool)) == str(PreviewShelfTool):
                 self.preview_shelf_tool = tool
-                print("check")

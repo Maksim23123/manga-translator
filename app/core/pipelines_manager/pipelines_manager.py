@@ -33,7 +33,7 @@ class PipelinesManager:
         self._pipeline_data = None # Object that holds list of pipelines in the project.
         self._active_pipeline = None # Holds referece to currently active pipeline.
 
-        self._pyflow_interaction_manager = PyFlowInteractionManager()
+        self._pyflow_interaction_manager = PyFlowInteractionManager(self.context)
         
         self.pipeline_data_io = PipelineDataIO(self.context)
         self.pipeline_data_model = PipelineDataModel(self.event_bus, context)
@@ -66,10 +66,9 @@ class PipelinesManager:
         new_active_pipeline = self.pipeline_data_model.get_pipeline(pipeline_name)
 
         if new_active_pipeline:
-
-            self.pyflow_instance.newFile()
-
             self._active_pipeline = new_active_pipeline
+
+            self._pyflow_interaction_manager.set_new_active_pipeline(self._active_pipeline)
             self.own_event_bus.activePipelineChanged.emit(self.active_pipeline)
             return True
         

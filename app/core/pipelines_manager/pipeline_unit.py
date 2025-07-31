@@ -24,7 +24,7 @@ class PipelineUnit:
     
 
     @property
-    def graph_path(self) -> str:
+    def graph_path(self) -> str|None:
         return self._graph_path
     
 
@@ -39,7 +39,6 @@ class PipelineUnit:
         
         self._graph_path = value
         self.unit_changed()
-        pass
 
 
     def unit_changed(self):
