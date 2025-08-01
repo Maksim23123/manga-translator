@@ -62,7 +62,8 @@ class PipelinesListController:
         item.setSizeHint(item_widget.sizeHint())
 
         def _on_active_unit_changed(new_active: PipelineUnit):
-            item_widget.set_active(item_widget.item_name == new_active.name)
+            if new_active:
+                item_widget.set_active(item_widget.item_name == new_active.name)
 
         connection = self.core.event_bus.pipeline_manager_event_bus.activePipelineChanged.connect(_on_active_unit_changed)  
 

@@ -113,7 +113,7 @@ class PipelinesManager:
         """
 
         self._pipeline_data = None
-        self._active_pipeline = None
+        self._clear_active_pipeline()
 
 
     def reload_pipeline_data(self):
@@ -143,4 +143,9 @@ class PipelinesManager:
     def _on_pipeline_deleted(self, pipeline: PipelineUnit):
         if (self._active_pipeline 
                 and self._active_pipeline.name == pipeline.name):
-            self._active_pipeline = None
+            self._clear_active_pipeline()
+    
+
+    def _clear_active_pipeline(self):
+        self._active_pipeline = None
+        self.own_event_bus.activePipelineChanged.emit(self._active_pipeline)

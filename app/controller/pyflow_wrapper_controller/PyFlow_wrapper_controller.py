@@ -13,6 +13,13 @@ class PyFlowWrapperController:
 
         self._init_subcontrollers()
         self._connect_controller()
+        self._connect_to_events()
+
+        self._update_editor_enabled()
+    
+
+    def _connect_to_events(self):
+        self.core.event_bus.pipeline_manager_event_bus.activePipelineChanged.connect(self._update_editor_enabled)
 
     
     def _connect_controller(self):
@@ -28,3 +35,13 @@ class PyFlowWrapperController:
     def _on_modified_changed(self, value: bool):
         if value:
             self.core.state_persistance_manager.notify_data_modified()
+    
+
+    def _update_editor_enabled(self):
+        pyflow_instance = self.core.pipelines_manager.pyflow_instance
+        active_pipeline = self.core.pipelines_manager.active_pipeline
+
+        if active_pipeline:
+            pyflow_instance.canvasWidget.setEnabled(True)
+        else:
+            pyflow_instance.canvasWidget.setEnabled(False)
