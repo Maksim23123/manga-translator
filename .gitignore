@@ -10,3 +10,4 @@ reference/
 venv/
 api_keys.yaml
 tempCodeRunnerFile.py
+.favorites.json
