@@ -41,6 +41,10 @@ class PipelineOutputNode(NodeBase):
         return "Description in rst format."
     
 
+    def isCallable(self):
+        return True
+    
+
     def _register_as_output_node(self):
         self.core.pipelines_manager.pyflow_interaction_manager.set_output_node(self)
 
@@ -48,4 +52,4 @@ class PipelineOutputNode(NodeBase):
     def compute(self, *args, **kwargs):
         
         print("Pipeline output comput")
-        self.inp.getData()
+        print(self.inp.getData())

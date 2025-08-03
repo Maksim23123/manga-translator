@@ -45,7 +45,6 @@ class PipelineExecutor:
     def node_is_in_graph(self, node: NodeBase) -> bool:
         all_nodes = self._graph_manager.getAllNodes()
         all_nodes_uids = [node.uid for node in all_nodes]
-        print(all_nodes_uids)
         if node.uid in all_nodes_uids:
             return True
         else:
