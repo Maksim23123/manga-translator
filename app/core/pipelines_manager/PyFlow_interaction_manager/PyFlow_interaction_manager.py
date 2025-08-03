@@ -1,7 +1,9 @@
 import os
 
+from PyFlow.Core.NodeBase import NodeBase
 from PyFlow.App import PyFlow
-from .pipeline_unit import PipelineUnit
+from ..pipeline_unit import PipelineUnit
+from .pipeline_executor import PipelineExecutor
 
 from core.context import Context
 from core.event_bus.event_bus import EventBus
@@ -32,6 +34,7 @@ class PyFlowInteractionManager:
         self.context = context
         self.event_bus = event_bus
         self.pyflow_instance = PyFlow.instance(software=self.SOFTWARE)
+        self.executor = PipelineExecutor(self.pyflow_instance.graphManager.get())
 
         self._connect_to_events()
     
@@ -40,6 +43,14 @@ class PyFlowInteractionManager:
         self.event_bus.state_persistance_manager_event_bus.writeStateRequested.connect(self.save_current_pipeline_graph)
     
 
+    def set_output_node(self, node: NodeBase):
+        if not self.executor.output_node:
+            self.executor.output_node = node
+        else:
+            node.remove_post_create = True
+            print("Warning: Attempted to add new instance of pipeline output node to the same graph")
+            
+
     def set_new_active_pipeline(self, new_active_pipeline: PipelineUnit):
         if self._current_active_pipeline: 
             self.save_current_pipeline_graph()
@@ -47,6 +58,8 @@ class PyFlowInteractionManager:
         self._current_active_pipeline = new_active_pipeline
 
         graph_path = self._current_active_pipeline.graph_path
+
+        self.executor.clear_output_node()
             
         if graph_path and os.path.exists(graph_path):
             self.pyflow_instance.loadFromFile(graph_path)
@@ -80,8 +93,3 @@ class PyFlowInteractionManager:
             sufix_index += 1
 
         return unique_path
-
-        
-
-        
-

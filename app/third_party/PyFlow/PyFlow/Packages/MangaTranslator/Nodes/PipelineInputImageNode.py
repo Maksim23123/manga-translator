@@ -11,15 +11,13 @@ class PipelineInputImageNode(NodeBase):
     @staticmethod
     def pinTypeHints():
         helper = NodePinsSuggestionsHelper()
-        helper.addInputDataType('BoolPin')
         helper.addOutputDataType('BoolPin')
-        helper.addInputStruct(StructureType.Single)
         helper.addOutputStruct(StructureType.Single)
         return helper
 
     @staticmethod
     def category():
-        return 'Pipeline flow'
+        return 'Pipeline input'
 
     @staticmethod
     def keywords():
@@ -30,4 +28,5 @@ class PipelineInputImageNode(NodeBase):
         return "Description in rst format."
 
     def compute(self, *args, **kwargs):
+        print("Pipeline image input compute")
         self.out.setData(True)

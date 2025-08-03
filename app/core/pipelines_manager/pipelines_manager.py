@@ -17,7 +17,7 @@ from .pipeline_data import PipelineData
 from .pipeline_data_model import PipelineDataModel
 from .pipeline_data_io import PipelineDataIO
 from .pipeline_unit import PipelineUnit
-from .PyFlow_interaction_manager import PyFlowInteractionManager
+from .PyFlow_interaction_manager.PyFlow_interaction_manager import PyFlowInteractionManager
 
 from core.routes import PIPELINES_DIR_RELATIVE_PATH
 
@@ -77,6 +77,11 @@ class PipelinesManager:
         for graph_path_from_dir in graph_files_paths:
             if not graph_path_from_dir in pipeline_related_graphs_paths:
                 os.remove(graph_path_from_dir)
+    
+
+    @property
+    def pyflow_interaction_manager(self) -> PyFlowInteractionManager:
+        return self._pyflow_interaction_manager
 
 
     @property
