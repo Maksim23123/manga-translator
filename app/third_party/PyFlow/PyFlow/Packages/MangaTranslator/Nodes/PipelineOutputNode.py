@@ -10,7 +10,7 @@ class PipelineOutputNode(NodeBase):
         self.core = Core()
         self.remove_post_create = False
         
-        self.inp = self.createInputPin('inp', 'BoolPin')
+        self.pipeline_result_image_input_pin = self.createInputPin('Image', 'ImageArrayPin')
 
         self._register_as_output_node()
 
@@ -24,7 +24,7 @@ class PipelineOutputNode(NodeBase):
     @staticmethod
     def pinTypeHints():
         helper = NodePinsSuggestionsHelper()
-        helper.addInputDataType('BoolPin')
+        helper.addInputDataType('ImageArrayPin')
         helper.addInputStruct(StructureType.Single)
         return helper
 
@@ -50,6 +50,5 @@ class PipelineOutputNode(NodeBase):
 
 
     def compute(self, *args, **kwargs):
-        
+        print(self.pipeline_result_image_input_pin.getData())
         print("Pipeline output comput")
-        print(self.inp.getData())
