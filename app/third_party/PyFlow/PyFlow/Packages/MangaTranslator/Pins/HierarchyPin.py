@@ -6,7 +6,7 @@ from pipeline.text_detector.hierarchy_builder.hierarchy import Hierarchy
 
 
 class HierarchyPin(PinBase):
-    """doc string for DemoPin"""
+    """Holds detection data like text areas and bubbles."""
     def __init__(self, name, parent, direction, **kwargs):
         super(HierarchyPin, self).__init__(name, parent, direction, **kwargs)
         self.setDefaultValue(None)
@@ -34,3 +34,7 @@ class HierarchyPin(PinBase):
     @staticmethod
     def processData(data):
         return data
+    
+    def serialize(self):
+        self.setData(None)
+        return super().serialize()

@@ -26,7 +26,7 @@ class TextExtractor:
         return text_node['bbox']
 
 
-    def extract_text(self, image_np: np.ndarray, text_chunks, expansion_ratio=0.8) -> tuple[list[dict], list[str]]:
+    def extract_text(self, image_np: np.ndarray, text_chunks, expansion_ratio=0.8) -> tuple[list[list[int]], list[str]]:
         bbox_list = []
         original_text_list = []
         mocr = MangaOcr()
