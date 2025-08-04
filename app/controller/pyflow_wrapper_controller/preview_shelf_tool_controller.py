@@ -2,6 +2,9 @@ from PyFlow.Packages.MangaTranslator.Tools.PreviewShelfTool import PreviewShelfT
 
 from core.core import Core
 
+import cv2
+import matplotlib.pyplot as plt
+
 
 
 class PreviewShelfToolController:
@@ -19,4 +22,11 @@ class PreviewShelfToolController:
     def _on_preview_shelf_tool_triggered(self):
         pipeline_executor = self.core.pipelines_manager.pyflow_interaction_manager.executor
 
-        pipeline_executor.get_output()
+        resulting_image = pipeline_executor.get_output()
+
+        if isinstance(resulting_image, cv2.typing.MatLike):
+            plt.figure(figsize=(8, 8))
+            plt.imshow(cv2.cvtColor(resulting_image, cv2.COLOR_BGR2RGB))
+            plt.title("Result image")
+            plt.axis("off")
+            plt.show()

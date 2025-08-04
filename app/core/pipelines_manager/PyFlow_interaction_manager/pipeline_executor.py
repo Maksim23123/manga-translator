@@ -53,4 +53,7 @@ class PipelineExecutor:
 
     def get_output(self):
         if self.check_output_node_is_valid():
-            self._output_node.compute()
+            resulting_image = self._output_node.compute()
+
+            return resulting_image
+

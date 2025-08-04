@@ -39,7 +39,7 @@ class TextDetectorNode(NodeBase):
     def compute(self, *args, **kwargs):
         input_image = self.image_inp_pin.getData()
         if not input_image is None:
-            hierarchy = self.text_detector.get_detection_hierarchy(input_image)
+            hierarchy = self.text_detector.get_detection_hierarchy(input_image.copy())
             self.hierarchy_out_pin.setData(hierarchy)
         else:
             self.setError(ValueError("Invalid image input."))

@@ -50,5 +50,7 @@ class PipelineOutputNode(NodeBase):
 
 
     def compute(self, *args, **kwargs):
-        print(self.pipeline_result_image_input_pin.getData())
         print("Pipeline output comput")
+        resulting_image = self.pipeline_result_image_input_pin.getData()
+        return resulting_image
+        
