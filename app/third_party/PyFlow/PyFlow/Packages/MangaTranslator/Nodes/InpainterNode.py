@@ -30,7 +30,7 @@ class InpainterNode(NodeBase):
 
     @staticmethod
     def category():
-        return 'Generated from wizard'
+        return 'Inpainting'
 
     @staticmethod
     def keywords():

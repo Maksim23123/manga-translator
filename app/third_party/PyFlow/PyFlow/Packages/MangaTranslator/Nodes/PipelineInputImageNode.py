@@ -8,7 +8,7 @@ from PyFlow.Core.Common import *
 
 class PipelineInputImageNode(NodeBase):
 
-    temp_image_path = "c:/Users/makss/My_projects/ABNS/Diploma/manga-translator/app/data/inputs/p (1).jpg" # Temporary image path
+    temp_image_path = "c:/Users/makss/My_projects/ABNS/Diploma/manga-translator/app/data/inputs/p (2).jpg" # Temporary image path
 
     def __init__(self, name):
         super(PipelineInputImageNode, self).__init__(name)
