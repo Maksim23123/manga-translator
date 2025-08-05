@@ -45,6 +45,9 @@ class PyFlowWrapper(QWidget, QObject):
         self._pull_pyflow_tools()
 
         self._wrap_modified_property()
+
+        self.pyflow_instance.getMenuBar().hide()
+        
     
 
     def _wrap_modified_property(self):
