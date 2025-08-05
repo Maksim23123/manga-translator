@@ -5,6 +5,7 @@ from gui.tabs.pipeline_editor.PyFlow_wrapper import PyFlowWrapper
 from .preview_shelf_tool_controller import PreviewShelfToolController
 from .preferences_shelf_tool_controller import PreferencesShelfToolController
 from .tools_menu_shelf_tool_controller import ToolsMenuShelfToolController
+from .plugins_shelf_tool_controller import PluginsShelfToolController
 
 
 
@@ -40,6 +41,10 @@ class PyFlowWrapperController:
         tools_menu_shelf_tool = self.pyflow_wrapper.tools_menu_shelf_tool
         if tools_menu_shelf_tool:
             self.tools_menu_shelf_tool_controller = ToolsMenuShelfToolController(tools_menu_shelf_tool)
+        
+        plugins_shelf_tool = self.pyflow_wrapper.plugins_shelf_tool
+        if plugins_shelf_tool:
+            self.plugins_shelf_tool_controller = PluginsShelfToolController(plugins_shelf_tool)
     
 
     def _on_modified_changed(self, value: bool):
