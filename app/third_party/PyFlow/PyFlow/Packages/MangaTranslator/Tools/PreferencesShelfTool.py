@@ -24,7 +24,7 @@ class PreferencesShelfTool(ShelfTool, QObject):
 
     @staticmethod
     def toolTip():
-        return "This is my new awesome shelf button"
+        return "Node editor preferences."
 
     @staticmethod
     def getIcon():
