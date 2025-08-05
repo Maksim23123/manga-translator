@@ -19,7 +19,7 @@ class PipelinesListDockTool(DockTool):
 
     @staticmethod
     def getIcon():
-        return QtGui.QIcon(":brick.png")
+        return None
 
     @staticmethod
     def toolTip():

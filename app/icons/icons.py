@@ -9,6 +9,7 @@ class Icons:
     PLAY_ICON_PATH = "app/icons/play.png"
     SETTINGS_ICON_PATH = "app/icons/settings.png"
     PLUGIN_ICON_PATH = "app/icons/plugin.png"
+    INFORMATION_ICON_PATH = "app/icons/information.png"
 
     @classmethod
     def get_colored_icon(cls, path: str, color: QColor) -> QIcon:

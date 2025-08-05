@@ -12,3 +12,5 @@ Icons from [Flaticon](https://www.flaticon.com/):
 - [Picture icons](https://www.flaticon.com/free-icons/picture) by [Freepik](https://www.flaticon.com/authors/freepik)
 - [Wrench icons](https://www.flaticon.com/free-icons/wrench) by [Freepik](https://www.flaticon.com/authors/freepik)
 - [Puzzle icons](https://www.flaticon.com/free-icons/puzzle) by [Freepik](https://www.flaticon.com/authors/freepik)
+- [Information icons](https://www.flaticon.com/free-icons/information) by [Anggara](https://www.flaticon.com/authors/anggara)
+

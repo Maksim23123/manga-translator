@@ -6,6 +6,7 @@ from .preview_shelf_tool_controller import PreviewShelfToolController
 from .preferences_shelf_tool_controller import PreferencesShelfToolController
 from .tools_menu_shelf_tool_controller import ToolsMenuShelfToolController
 from .plugins_shelf_tool_controller import PluginsShelfToolController
+from .information_shelf_tool_controller import InformationShelfToolController
 
 
 
@@ -45,6 +46,10 @@ class PyFlowWrapperController:
         plugins_shelf_tool = self.pyflow_wrapper.plugins_shelf_tool
         if plugins_shelf_tool:
             self.plugins_shelf_tool_controller = PluginsShelfToolController(plugins_shelf_tool)
+        
+        information_shelf_tool = self.pyflow_wrapper.information_shelf_tool
+        if information_shelf_tool:
+            self.information_shelf_tool_controller = InformationShelfToolController(information_shelf_tool)
     
 
     def _on_modified_changed(self, value: bool):
