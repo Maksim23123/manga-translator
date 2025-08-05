@@ -31,8 +31,10 @@ class PyFlowInteractionManager:
 
     def __init__(self, event_bus: EventBus, context: Context):
         self._current_active_pipeline = None
+        self._preview_image_path = None
         self.context = context
         self.event_bus = event_bus
+        self.own_event_bus = self.event_bus.pipeline_manager_event_bus.pyflow_iteraction_manager_event_bus
         self.pyflow_instance = PyFlow.instance(software=self.SOFTWARE)
         self.executor = PipelineExecutor(self.pyflow_instance.graphManager.get())
 
@@ -41,6 +43,17 @@ class PyFlowInteractionManager:
 
     def _connect_to_events(self):
         self.event_bus.state_persistance_manager_event_bus.writeStateRequested.connect(self.save_current_pipeline_graph)
+    
+
+    @property
+    def preview_image_path(self):
+        return self._preview_image_path
+
+
+    def set_preview_image_path(self, path: str):
+        if path and os.path.exists(path):
+            self._preview_image_path = path
+            self.own_event_bus.previewImagePathChanged.emit(self._preview_image_path)
     
 
     def set_output_node(self, node: NodeBase):

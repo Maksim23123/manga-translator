@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (QApplication, QSizePolicy, QToolButton, QWidget)
 
 from PyFlow.UI.Tool.Tool import ShelfTool
 from PyFlow.Core.Common import Direction
+from PyFlow.UI.ContextMenuDataBuilder import ContextMenuDataBuilder
 
 from icons.icons import Icons
 
@@ -20,8 +21,15 @@ class PreviewShelfTool(ShelfTool, QObject):
 
     triggered = Signal()
 
+    changeImageTriggered = Signal()
+
     def __init__(self):
         super(PreviewShelfTool, self).__init__()
+
+    def contextMenuBuilder(self):
+        builder = ContextMenuDataBuilder()
+        builder.addEntry("Change image that will be used for preview", "Change image", self.changeImageTriggered.emit)
+        return builder
 
     @staticmethod
     def toolTip():
