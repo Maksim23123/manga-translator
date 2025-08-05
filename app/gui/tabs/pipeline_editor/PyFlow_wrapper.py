@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (QApplication, QDockWidget, QHBoxLayout, QLabel,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 from PyFlow.App import PyFlow
 from PyFlow.Packages.MangaTranslator.Tools.PreviewShelfTool import PreviewShelfTool
+from PyFlow.Packages.MangaTranslator.Tools.PreferencesShelfTool import PreferencesShelfTool
 from PyFlow.UI.Canvas.UICommon import SessionDescriptor
 from PyFlow.UI.Tool.Tool import ShelfTool, ToolBase
 from core.core import Core
@@ -64,10 +65,14 @@ class PyFlowWrapper(QWidget, QObject):
         pyflow_tools = self.pyflow_instance.getRegisteredTools()
 
         self.preview_shelf_tool = None
+        self.preferences_shelf_tool = None
 
         for tool in pyflow_tools:
             if str(type(tool)) == str(PreviewShelfTool):
                 self.preview_shelf_tool = tool
+            
+            if str(type(tool)) == str(PreferencesShelfTool):
+                self.preferences_shelf_tool = tool
 
 
     def _remove_empty_shelf_tools(self):

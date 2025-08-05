@@ -5,7 +5,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QSizePolicy, QToolButton, QWidget)
 
 from PyFlow.UI.Tool.Tool import ShelfTool
 from PyFlow.Core.Common import Direction
@@ -15,26 +14,26 @@ from icons.icons import Icons
 from qtpy import QtGui
 
 
-class PreviewShelfTool(ShelfTool, QObject):
+class PreferencesShelfTool(ShelfTool, QObject):
     """docstring for DemoShelfTool."""
 
     triggered = Signal()
 
     def __init__(self):
-        super(PreviewShelfTool, self).__init__()
+        super(PreferencesShelfTool, self).__init__()
 
     @staticmethod
     def toolTip():
-        return "Preview pipeline result"
+        return "This is my new awesome shelf button"
 
     @staticmethod
     def getIcon():
-        icon = QIcon(Icons.PLAY_ICON_PATH)
+        icon = QIcon(Icons.COGWHEEL_ICON_PATH)
         return icon
 
     @staticmethod
     def name():
-        return "Preview"
+        return "Preferences"
 
     def do(self):
         self.triggered.emit()
