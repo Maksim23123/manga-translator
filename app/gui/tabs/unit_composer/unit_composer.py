@@ -11,14 +11,13 @@ from core.core import Core
 from core.unit_manager.unit import Unit
 from core.unit_manager.hierarchy_node import HierarchyNode
 
-class UnitComposer(QMainWindow):
+class UnitComposer(QMainWindow): # TODO: Allows user to reopen closed dock widgets 
     unit_list_updated = Signal()
 
     def __init__(self, core: Core):
         super().__init__()
         self.core = core
         self.unit_item_widget_list = []
-
 
         self._setup_ui()
         self._connect_to_events()

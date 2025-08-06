@@ -17,6 +17,7 @@ class PreviewImageSelectionDialogController:
         self.model = HierarchyTreeViewModel(self.core)
 
         self.dialog.unit_content_treeView.setModel(self.model)
+        self.dialog.unit_content_treeView.setHeaderHidden(True)
         active_unit = self.core.unit_manager.active_unit
         CURRENT_UNIT_NAME_LABEL_PREFIX = "Active manga: "
         if active_unit:
