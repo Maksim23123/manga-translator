@@ -83,6 +83,31 @@
 					"hidden": [
 						"$Default"
 					]
+				},
+				{
+					"hidden": [
+						"venv/",
+						".env",
+						".favorites.json",
+						".gitattributes",
+						".gitignore",
+						"manga-translator.code-workspace",
+						"README.md",
+						"requirements-gui.txt",
+						"requirements.txt",
+						".gitignore",
+						"reference/",
+						"tests/",
+						".vscode/",
+						"app/utils/",
+						"app/__init__.py",
+						"app/config/",
+						"app/tempCodeRunnerFile.py"
+					],
+					"name": "Clean",
+					"description": "",
+					"detail": "",
+					"peek": []
 				}
 			]
 		},
@@ -91,22 +116,30 @@
 			"**/.svn": true,
 			"**/.hg": true,
 			"**/CVS": true,
-			"**/.DS_Store": true
+			"**/.DS_Store": true,
+			"venv/": true,
+			".env": true,
+			".favorites.json": true,
+			".gitattributes": true,
+			".gitignore": true,
+			"manga-translator.code-workspace": true,
+			"README.md": true,
+			"requirements-gui.txt": true,
+			"requirements.txt": true,
+			"reference/": true,
+			"tests/": true,
+			".vscode/": true,
+			"app/utils/": true,
+			"app/__init__.py": true,
+			"app/config/": true,
+			"app/tempCodeRunnerFile.py": true
 		},
 		"favorites.groups": [
 			"Default",
 			"PyFlow quick access"
 		],
 		"favorites.currentGroup": "PyFlow quick access",
-		"favorites.resources": [
-			{
-				"filePath": "app\\third_party\\PyFlow\\PyFlow\\Packages",
-				"group": "PyFlow quick access"
-			},
-			{
-				"filePath": "app\\pipeline",
-				"group": "PyFlow quick access"
-			}
-		]
+		"favorites.resources": [],
+		"hidefiles.selectedProfile": "Clean"
 	}
 }

@@ -9,6 +9,8 @@ from ..tabs.sub_main_window import SubMainWindow
 from core.core import Core
 from ..tabs.unit_composer.unit_composer import UnitComposer
 from gui.tabs.pipeline_editor.PyFlow_wrapper import PyFlowWrapper
+from ..tabs.page_editor.page_editor import PageEditor
+
 
 class ProjectWindow(QMainWindow):
     WINDOW_NAME_PREFIX = "Manga Translator"
@@ -78,15 +80,14 @@ class ProjectWindow(QMainWindow):
     def _add_tabs(self):
 
         self.pipline_editor = PyFlowWrapper()
-
-        # Wrap sub-main-window in a QWidget for tab embedding
-        self.tabs.addTab(self.pipline_editor, f"Pipeline editor")
-
+        self.tabs.addTab(self.pipline_editor, f"Pipeline Editor")
+        
         self.unit_composer = UnitComposer(self.core)
-
-        # Wrap sub-main-window in a QWidget for tab embedding
         unit_composer_container = QWidget()
         unit_composer_layout = QVBoxLayout(unit_composer_container)
         unit_composer_layout.setContentsMargins(0, 0, 0, 0)
         unit_composer_layout.addWidget(self.unit_composer)
         self.tabs.addTab(unit_composer_container, f"Manga Composer")
+
+        self.page_editor = PageEditor()
+        self.tabs.addTab(self.page_editor, f"Page Editor")
