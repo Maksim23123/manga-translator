@@ -12,7 +12,9 @@ from core.unit_manager.unit import Unit
 from core.unit_manager.hierarchy_node import HierarchyNode
 
 class UnitComposer(QMainWindow): # TODO: Allows user to reopen closed dock widgets 
+
     unit_list_updated = Signal()
+    unit_list_reset = Signal()
 
     def __init__(self, core: Core):
         super().__init__()
@@ -38,10 +40,16 @@ class UnitComposer(QMainWindow): # TODO: Allows user to reopen closed dock widge
     
 
     def _connect_to_events(self):
-        self.core.event_bus.activeProjectChanged.connect(self._update_unit_list)
+        self.core.event_bus.activeProjectChanged.connect(self._on_active_project_changed)
         self.core.event_bus.unitsUpdated.connect(self._update_unit_list)
 
 # Updating unit list
+
+    def _on_active_project_changed(self):
+        self.unit_listWidget.clearSelection()
+        self._update_unit_list()
+        self.unit_list_reset.emit()
+
 
     def _update_unit_list(self):
         self.unit_listWidget.clear()

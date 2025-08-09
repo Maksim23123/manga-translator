@@ -32,8 +32,19 @@ class UnitManager:
     
 
     def _connect_to_events(self):
-        self.event_bus.activeProjectChanged.connect(self._init_units_folder_path)
+        self.event_bus.activeProjectChanged.connect(self._on_active_project_changed)
         self.event_bus.activeUnitUpdated.connect(self.update_active_unit_metadata)
+    
+# Internal work
+
+    def _on_active_project_changed(self):
+        self._init_units_folder_path()
+        self._clear_state()
+
+    
+    def _clear_state(self):
+        self.active_unit = None
+        self.event_bus.activeUnitChanged.emit()
 
 # Unit creation
 
@@ -89,6 +100,11 @@ class UnitManager:
             self.event_bus.activeUnitChanged.emit()
 
 
+    def clear_active(self):
+        self.update_active_unit_metadata()
+        self.active_unit = None
+        self.event_bus.activeUnitChanged.emit()
+
 # Composing unit list
 
     def is_unit(self, path):
@@ -111,7 +127,7 @@ class UnitManager:
         # units.sort(key=lambda f: f.stat().st_birthtime)  # ⬅️ Oldest to newest
         units.sort(key=lambda f: f.stat().st_birthtime, reverse=True)  # ⬅️ Newest to oldest
 
-        return [self.load_unit(f.path) for f in units]
+        return [self.load_unit(f.path) for f in units] # TODO: Make get_unit_list function not load all the files of units on every call and cache it instead.
 
 # Unit removal
 
@@ -171,7 +187,6 @@ class UnitManager:
             meta_file = os.path.join(unit_path, "unit.json")
             with open(meta_file, "w", encoding="utf-8") as f:
                 json.dump(self.active_unit.to_metadata(), f, indent=4)
-
 
 
 

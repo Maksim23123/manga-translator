@@ -16,3 +16,5 @@ class PageEditor(QMainWindow):
     def _apply_ui(self):
         self.ui = Ui_PageEditor()
         self.ui.setupUi(self)
+
+        self.active_unit_comboBox = self.ui.active_unit_comboBox

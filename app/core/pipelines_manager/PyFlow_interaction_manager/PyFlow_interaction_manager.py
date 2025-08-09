@@ -43,7 +43,13 @@ class PyFlowInteractionManager:
 
     def _connect_to_events(self):
         self.event_bus.state_persistance_manager_event_bus.writeStateRequested.connect(self.save_current_pipeline_graph)
+        self.event_bus.activeProjectChanged.connect(self._reset)
     
+
+    def _reset(self):
+        self._current_active_pipeline = None
+        self._preview_image_path = None
+
 
     @property
     def preview_image_path(self):

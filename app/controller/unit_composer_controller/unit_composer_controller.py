@@ -34,6 +34,7 @@ class UnitComposerController:
         self.unit_composer.import_image_button.clicked.connect(self._import_image_on_click)
         self.unit_composer.unit_listWidget.itemSelectionChanged.connect(self._unit_list_on_selection_changed)
         self.unit_composer.unit_hierarchy_treeView.clicked.connect(self._on_unit_hierarchy_clicked)
+        self.unit_composer.unit_list_reset.connect(self._on_list_reset)
 
 
     def _update_unit_item_controller_list(self):
@@ -42,6 +43,10 @@ class UnitComposerController:
         for item_widget in self.unit_composer.unit_item_widget_list:
             item_contorller = UnitListItemController(self.core, item_widget)
             self.unit_item_controller_list.append(item_contorller)
+    
+
+    def _on_list_reset(self):
+        self.core.unit_manager.clear_active()
 
 
     def _new_unit_on_click(self):
