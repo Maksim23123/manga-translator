@@ -116,23 +116,7 @@
 			"**/.svn": true,
 			"**/.hg": true,
 			"**/CVS": true,
-			"**/.DS_Store": true,
-			"venv/": true,
-			".env": true,
-			".favorites.json": true,
-			".gitattributes": true,
-			".gitignore": true,
-			"manga-translator.code-workspace": true,
-			"README.md": true,
-			"requirements-gui.txt": true,
-			"requirements.txt": true,
-			"reference/": true,
-			"tests/": true,
-			".vscode/": true,
-			"app/utils/": true,
-			"app/__init__.py": true,
-			"app/config/": true,
-			"app/tempCodeRunnerFile.py": true
+			"**/.DS_Store": true
 		},
 		"favorites.groups": [
 			"Default",
@@ -140,6 +124,7 @@
 		],
 		"favorites.currentGroup": "PyFlow quick access",
 		"favorites.resources": [],
-		"hidefiles.selectedProfile": "Clean"
+		"hidefiles.selectedProfile": "Show All Files",
+		"explorer.excludeGitIgnore": false
 	}
 }

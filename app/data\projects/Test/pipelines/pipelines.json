@@ -1,0 +1,7 @@
+{
+    "pipelines_list": [
+        {
+            "name": "Full pipeline test"
+        }
+    ]
+}

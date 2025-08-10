@@ -40,6 +40,8 @@ class PageEditorController:
         combobox = self.page_editor.active_unit_comboBox
         combobox.clear()
         self.units_list = self.core.unit_manager.get_unit_list()
+        if not self.units_list:
+            return
         unit_combobox_items = [unit.unit_name for unit in self.units_list]
         combobox.addItems(unit_combobox_items)
 

@@ -77,12 +77,10 @@ class ProjectCreatorController:
             return False
 
         # Path must exist
-        if not os.path.isdir(path):
-            return False
-
-        # Check for write permissions
-        return os.access(path, os.W_OK)
-    
+        if os.path.exists(path) and os.path.isdir(path):
+            return os.access(path, os.W_OK)
+        
+        return True
 
     def show_warning(self, title: str, message: str):
         QMessageBox.warning(self.project_creator, title, message)

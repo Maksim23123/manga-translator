@@ -1,0 +1,23 @@
+{
+    "unit_name": "First manga",
+    "created_at": "2025-08-10T02:28:02.581979",
+    "hierarchy": {
+        "id": "d35a33a9d50c46e9b4fdc0b256ba4dc0",
+        "name": "root",
+        "type": "folder",
+        "children": [
+            {
+                "id": "32ee80dc2d704f36ba5bdfa5957449c5",
+                "name": "Chapter 1",
+                "type": "folder",
+                "children": []
+            },
+            {
+                "id": "e2c25681549d4eb599ecc41aa5e14278",
+                "name": "Chapter 2",
+                "type": "folder",
+                "children": []
+            }
+        ]
+    }
+}
