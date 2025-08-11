@@ -48,6 +48,9 @@ class PageEditorController:
         
     def _set_unit_combobox_current_index(self):
         active_unit = self.core.unit_manager.active_unit
+        
+        if not self.units_list:
+            return
 
         unit_combobox_items = [unit.unit_name for unit in self.units_list]
 

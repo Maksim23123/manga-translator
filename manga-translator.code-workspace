@@ -125,6 +125,7 @@
 		"favorites.currentGroup": "PyFlow quick access",
 		"favorites.resources": [],
 		"hidefiles.selectedProfile": "Show All Files",
-		"explorer.excludeGitIgnore": false
+		"explorer.excludeGitIgnore": false,
+		"python-envs.pythonProjects": []
 	}
 }

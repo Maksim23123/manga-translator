@@ -1,16 +1,16 @@
-from .image_importer import ImageImporter
+from image_importer import ImageImporter
 import os
 import matplotlib.pyplot as plt
 import cv2
-from .text_detector.text_detector import TextDetector
-from .text_extractor import TextExtractor
-from .translator import Translator
-from .inpainter import Inpainter
-from .text_inserter import TextInserter
+from text_detector.text_detector import TextDetector
+from text_extractor import TextExtractor
+from translator import Translator
+from inpainter import Inpainter
+from text_inserter import TextInserter
 
 
-def execute_pipline():
-    file_name = "p (2)"
+def execute_pipeline():
+    file_name = "p (4)"
     file_ext = "jpg"
     input_folder_path = "app/data/inputs"
     image_path = os.path.join(input_folder_path, f"{file_name}.{file_ext}")
@@ -51,3 +51,7 @@ def execute_pipline():
     plt.axis("off")
     plt.show()
     #---
+
+
+if __name__ == "__main__":
+    execute_pipeline()
