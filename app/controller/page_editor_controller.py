@@ -19,16 +19,13 @@ class PageEditorController:
 
     def _connect_to_events(self):
         self.core.event_bus.activeProjectChanged.connect(self._reset)
+        self.core.event_bus.unitsUpdated.connect(self._reset)
         self.core.event_bus.activeUnitUpdated.connect(self._update_active_unit_combobox)
         self.core.event_bus.activeUnitChanged.connect(self._set_unit_combobox_current_index)
 
 
     def _connect_controller(self):
         self.page_editor.active_unit_comboBox.currentIndexChanged.connect(self._on_unit_combobox_current_index_changed)
-
-
-    def _on_project_changed(self):
-        self._update_active_unit_combobox()
     
 
     def _reset(self):

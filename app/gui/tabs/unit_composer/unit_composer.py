@@ -54,9 +54,7 @@ class UnitComposer(QMainWindow): # TODO: Allows user to reopen closed dock widge
     def _update_unit_list(self):
         self.unit_listWidget.clear()
         self.unit_item_widget_list.clear()
-        unit_list = self.core.unit_manager.get_unit_list()
-
-        if unit_list:
+        if unit_list := self.core.unit_manager.get_unit_list():
             for unit in unit_list:
                 is_active = False
                 if self.core.unit_manager.active_unit and unit.unit_name == self.core.unit_manager.active_unit.unit_name: is_active = True
