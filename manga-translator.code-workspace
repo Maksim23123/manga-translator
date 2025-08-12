@@ -68,6 +68,7 @@
 		"favorites.sortDirection": "DESC",
 		"hidefiles.configurationType": "local",
 		"hidefiles.globalConfig": {
+
 			"profiles": [
 				{
 					"name": "Default",
@@ -102,7 +103,8 @@
 						"app/utils/",
 						"app/__init__.py",
 						"app/config/",
-						"app/tempCodeRunnerFile.py"
+						"app/tempCodeRunnerFile.py",
+						"__pycache__"
 					],
 					"name": "Clean",
 					"description": "",
@@ -116,16 +118,49 @@
 			"**/.svn": true,
 			"**/.hg": true,
 			"**/CVS": true,
-			"**/.DS_Store": true
+			"**/.DS_Store": true,
+			"venv/": true,
+			".env": true,
+			".favorites.json": true,
+			".gitattributes": true,
+			".gitignore": true,
+			"manga-translator.code-workspace": true,
+			"README.md": true,
+			"requirements-gui.txt": true,
+			"requirements.txt": true,
+			"reference/": true,
+			"tests/": true,
+			".vscode/": true,
+			"app/utils/": true,
+			"app/__init__.py": true,
+			"app/config/": true,
+			"app/tempCodeRunnerFile.py": true,
+			"app/gui/__pycache__/": true
 		},
 		"favorites.groups": [
 			"Default",
 			"PyFlow quick access"
 		],
 		"favorites.currentGroup": "Default",
-		"favorites.resources": [],
-		"hidefiles.selectedProfile": "Show All Files",
+		"favorites.resources": [
+			{
+				"filePath": "app\\controller",
+				"group": "Default"
+			},
+			{
+				"filePath": "app\\core",
+				"group": "Default"
+			},
+			{
+				"filePath": "app\\gui",
+				"group": "Default"
+			}
+		],
+		"hidefiles.selectedProfile": "Clean",
 		"explorer.excludeGitIgnore": false,
-		"python-envs.pythonProjects": []
+		"python-envs.pythonProjects": [],
+		"cSpell.words": [
+			"subcontrollers"
+		]
 	}
 }

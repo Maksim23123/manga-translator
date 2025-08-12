@@ -18,3 +18,4 @@ class PageEditor(QMainWindow):
         self.ui.setupUi(self)
 
         self.active_unit_comboBox = self.ui.active_unit_comboBox
+        self.unit_hierarchy_treeView = self.ui.treeView
