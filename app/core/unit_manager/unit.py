@@ -7,7 +7,7 @@ class Unit:
         self.unit_path = unit_path
 
 
-        if 'hierarchy' in unit_data.keys() and unit_data['hierarchy']:
+        if 'hierarchy' in unit_data and unit_data['hierarchy']:
             self.hierarchy_root = HierarchyNode.from_dict(unit_data['hierarchy'])
         else:
             self.hierarchy_root = HierarchyNode("root", 'folder')

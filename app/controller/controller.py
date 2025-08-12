@@ -3,7 +3,7 @@ from gui.gui import GUI
 from .project_window_controller import ProjectWindowController
 from .unit_composer_controller.unit_composer_controller import UnitComposerController
 from .pyflow_wrapper_controller.PyFlow_wrapper_controller import PyFlowWrapperController
-from .page_editor_controller import PageEditorController
+from .page_editor_controller.page_editor_controller import PageEditorController
 
 class Contorller:
     def __init__(self, core: Core, gui: GUI):

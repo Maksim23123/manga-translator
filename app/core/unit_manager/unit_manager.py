@@ -78,7 +78,7 @@ class UnitManager:
     
 # Unit loading
 
-    def load_unit(self, unit_path) -> Unit:
+    def load_unit(self, unit_path) -> Unit|None:
         meta_file = os.path.join(unit_path, "unit.json")
 
         if not os.path.exists(meta_file):
@@ -93,7 +93,7 @@ class UnitManager:
         return Unit(unit_data, unit_path)
     
 
-    def set_active(self, unit: Unit):
+    def set_active(self, unit: Unit|None):
         if unit and self.is_unit(unit.unit_path):
             self.update_active_unit_metadata()
             self.active_unit = self.load_unit(unit.unit_path)
@@ -136,8 +136,10 @@ class UnitManager:
             if self.active_unit and self.active_unit.unit_path == unit_path: 
                 self.active_unit = None
                 self.event_bus.activeUnitChanged.emit()
+                return True
             shutil.rmtree(unit_path)
             self.event_bus.unitsUpdated.emit()
+        return False
 
 # import image
 
@@ -161,6 +163,9 @@ class UnitManager:
 
             # Copy the image
             shutil.copy2(image_path, target_path)
+            
+            if not self.active_unit:
+                return
 
             self.active_unit.hierarchy_root.add_image(remove_extension(filename), target_path)
             self.update_active_unit_metadata()
