@@ -17,8 +17,10 @@ class UnitManager:
         super().__init__()
         self.event_bus = event_bus
         self.context = context
-        self.active_unit = None #TODO: Make active item private
-        self.base_path = None
+        self._active_unit = None
+        self._base_path = None
+        self._units_list = []
+        self._units_up_to_date = False
         self._init_units_folder_path()
         self._connect_to_events()
 
@@ -27,8 +29,8 @@ class UnitManager:
     def _init_units_folder_path(self):
         root_path = self.context.active_project_directory
         if root_path and os.path.exists(root_path):
-            self.base_path = os.path.join(root_path, self.DEFAULT_UNITS_DIR_PATH)
-            os.makedirs(self.base_path, exist_ok=True)
+            self._base_path = os.path.join(root_path, self.DEFAULT_UNITS_DIR_PATH)
+            os.makedirs(self._base_path, exist_ok=True)
     
 
     def _connect_to_events(self):
@@ -37,22 +39,28 @@ class UnitManager:
     
 # Internal work
 
+    @property
+    def active_unit(self):
+        return self._active_unit
+
     def _on_active_project_changed(self):
         self._init_units_folder_path()
         self._clear_state()
-
+        self._units_up_to_date = False
+        self.event_bus.unitsUpdated.emit()
+    
     
     def _clear_state(self):
-        self.active_unit = None
+        self._active_unit = None
         self.event_bus.activeUnitChanged.emit()
 
 # Unit creation
 
     def create_new_unit(self, unit_name, set_new_active=True):
-        if not self.base_path:
+        if not self._base_path:
             return
 
-        unit_path = os.path.join(self.base_path, unit_name)
+        unit_path = os.path.join(self._base_path, unit_name)
 
         if os.path.exists(unit_path):
             raise FileExistsError(f"Unit folder '{unit_path}' already exists.")
@@ -72,6 +80,7 @@ class UnitManager:
         print(f"Unit '{unit_name}' created at {unit_path}")
         if set_new_active: self.set_active(self.load_unit(unit_path)) 
 
+        self._units_up_to_date = True
         self.event_bus.unitsUpdated.emit()
 
         return unit_path
@@ -87,7 +96,7 @@ class UnitManager:
             try:
                 unit_data = json.load(f)
             except json.decoder.JSONDecodeError:
-                print(f"Warning: Corupted metadata located at {unit_path}")
+                print(f"Warning: Corrupted metadata located at {unit_path}")
                 return None
 
         return Unit(unit_data, unit_path)
@@ -96,13 +105,13 @@ class UnitManager:
     def set_active(self, unit: Unit|None):
         if unit and self.is_unit(unit.unit_path):
             self.update_active_unit_metadata()
-            self.active_unit = self.load_unit(unit.unit_path)
+            self._active_unit = self.load_unit(unit.unit_path)
             self.event_bus.activeUnitChanged.emit()
 
 
     def clear_active(self):
         self.update_active_unit_metadata()
-        self.active_unit = None
+        self._active_unit = None
         self.event_bus.activeUnitChanged.emit()
 
 # Composing unit list
@@ -110,35 +119,39 @@ class UnitManager:
     def is_unit(self, path):
         meta_file = os.path.join(path, "unit.json")
 
-        if not os.path.exists(meta_file): return False
-        return True
+        return bool(os.path.exists(meta_file))
     
 
     def get_unit_list(self):
-        if not self.base_path:
-            return
+        if not self._units_up_to_date:
+            if not self._base_path:
+                return
 
-        units = [
-            f for f in os.scandir(self.base_path)
-            if f.is_dir() and self.is_unit(f.path)
-        ]
+            units = [
+                f for f in os.scandir(self._base_path)
+                if f.is_dir() and self.is_unit(f.path)
+            ]
 
-        # Sort by creation time (newest first or oldest first)
-        # units.sort(key=lambda f: f.stat().st_birthtime)  # ⬅️ Oldest to newest
-        units.sort(key=lambda f: f.stat().st_birthtime, reverse=True)  # ⬅️ Newest to oldest
+            # Sort by creation time (newest first or oldest first)
+            # units.sort(key=lambda f: f.stat().st_birthtime)  # ⬅️ Oldest to newest
+            units.sort(key=lambda f: f.stat().st_birthtime, reverse=True)  # ⬅️ Newest to oldest
 
-        return [self.load_unit(f.path) for f in units] # TODO: Make get_unit_list function not load all the files of units on every call and cache it instead.
+            self._units_list = [self.load_unit(f.path) for f in units]
+            self._units_up_to_date = True
+        return self._units_list
 
 # Unit removal
 
     def delete_unit(self, unit_path: str) -> bool:
         if self.is_unit(unit_path):
-            if self.active_unit and self.active_unit.unit_path == unit_path: 
-                self.active_unit = None
+            if self._active_unit and self._active_unit.unit_path == unit_path: 
+                self._active_unit = None
                 self.event_bus.activeUnitChanged.emit()
-                return True
+               
             shutil.rmtree(unit_path)
             self.event_bus.unitsUpdated.emit()
+            self._units_up_to_date = False
+            return True
         return False
 
 # import image
@@ -149,9 +162,7 @@ class UnitManager:
 
 
     def import_image(self, image_path):
-        target_folder_path = self.get_original_folder_path()
-
-        if target_folder_path:
+        if target_folder_path := self.get_original_folder_path():
             # Ensure target folder exists
             os.makedirs(target_folder_path, exist_ok=True)
 
@@ -163,7 +174,7 @@ class UnitManager:
 
             # Copy the image
             shutil.copy2(image_path, target_path)
-            
+
             if not self.active_unit:
                 return
 
