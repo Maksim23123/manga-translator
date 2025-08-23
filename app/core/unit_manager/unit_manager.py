@@ -80,7 +80,7 @@ class UnitManager:
         print(f"Unit '{unit_name}' created at {unit_path}")
         if set_new_active: self.set_active(self.load_unit(unit_path)) 
 
-        self._units_up_to_date = True
+        self._units_up_to_date = False
         self.event_bus.unitsUpdated.emit()
 
         return unit_path
@@ -149,8 +149,8 @@ class UnitManager:
                 self.event_bus.activeUnitChanged.emit()
                
             shutil.rmtree(unit_path)
-            self.event_bus.unitsUpdated.emit()
             self._units_up_to_date = False
+            self.event_bus.unitsUpdated.emit()
             return True
         return False
 

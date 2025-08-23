@@ -1,27 +1,34 @@
 from core.core import Core
 from gui.tabs.page_editor.page_editor import PageEditor
 from controller.unit_composer_controller.unit_hierarchy.hierarchy_tree_view_model import HierarchyTreeViewModel
+from PySide6.QtWidgets import QAbstractItemView
+from PySide6.QtCore import Signal, QObject
 
 
-
-class UnitViewDockWidgetController:
+class UnitViewDockWidgetController(QObject):
+    node_selection_changed = Signal(list)  # Emits list of selected hierarchy nodes
+    
     def __init__(self, page_editor: PageEditor) -> None:
+        super().__init__()
         self.core = Core()
         self.active_unit_comboBox = page_editor.active_unit_comboBox
         self.unit_hierarchy_tree_view = page_editor.unit_hierarchy_treeView
-        
         self.unit_hierarchy_tree_view.setHeaderHidden(True)
         self.unit_hierarchy_model = HierarchyTreeViewModel(self.core, parent=self.unit_hierarchy_tree_view)
+        self.unit_hierarchy_tree_view.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.unit_hierarchy_tree_view.setModel(self.unit_hierarchy_model)
 
         self._update_active_unit_combobox()
         self._set_unit_combobox_current_index()
-        
         self._update_unit_hierarchy_tree_view()
-
         self._connect_to_events()
         self._connect_controller()
-    
+        self.unit_hierarchy_tree_view.selectionModel().selectionChanged.connect(self._on_selection_changed)
+   
+    def _on_selection_changed(self, selected, deselected):
+        indexes = self.unit_hierarchy_tree_view.selectionModel().selectedIndexes()
+        nodes = [self.unit_hierarchy_model.get_node(index) for index in indexes if index.isValid()]
+        self.node_selection_changed.emit(nodes)
 
     def _connect_to_events(self):
         self.core.event_bus.activeProjectChanged.connect(self._update_active_unit_combobox)

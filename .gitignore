@@ -11,3 +11,4 @@ venv/
 api_keys.yaml
 tempCodeRunnerFile.py
 .favorites.json
+.github/instructions/general_instructions.instructions.md

@@ -88,7 +88,7 @@ class PyFlowInteractionManager:
     
     def save_current_pipeline_graph(self):
         if not os.path.exists(self.context.active_project_directory):
-                raise FileNotFoundError(f"Project directory doesn't exist.")
+            raise FileNotFoundError(f"Project directory doesn't exist.")
 
         if self._current_active_pipeline:
             graph_path = self._current_active_pipeline.graph_path

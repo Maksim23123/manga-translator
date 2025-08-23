@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'pageEditorQaWWBi.ui'
+## Form generated from reading UI file 'pageEditorpLvlWb.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.1
 ##
@@ -15,10 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QDockWidget, QGraphicsView,
-    QHBoxLayout, QHeaderView, QLabel, QMainWindow,
-    QSizePolicy, QSpacerItem, QTreeView, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QDockWidget, QHBoxLayout,
+    QHeaderView, QLabel, QMainWindow, QSizePolicy,
+    QSpacerItem, QTreeView, QVBoxLayout, QWidget)
 
 class Ui_PageEditor(object):
     def setupUi(self, PageEditor):
@@ -29,15 +28,10 @@ class Ui_PageEditor(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.image_graphicsView = QGraphicsView(self.centralwidget)
-        self.image_graphicsView.setObjectName(u"image_graphicsView")
+        self.central_widget_verticalLayout = QVBoxLayout()
+        self.central_widget_verticalLayout.setObjectName(u"central_widget_verticalLayout")
 
-        self.verticalLayout.addWidget(self.image_graphicsView)
-
-
-        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_2.addLayout(self.central_widget_verticalLayout)
 
         PageEditor.setCentralWidget(self.centralwidget)
         self.unit_view_dockWidget = QDockWidget(PageEditor)
@@ -56,6 +50,8 @@ class Ui_PageEditor(object):
         self.horizontalLayout.addWidget(self.label, 0, Qt.AlignmentFlag.AlignLeft)
 
         self.active_unit_comboBox = QComboBox(self.dockWidgetContents)
+        self.active_unit_comboBox.addItem("")
+        self.active_unit_comboBox.addItem("")
         self.active_unit_comboBox.setObjectName(u"active_unit_comboBox")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -94,6 +90,8 @@ class Ui_PageEditor(object):
         self.horizontalLayout_2.addWidget(self.label_2, 0, Qt.AlignmentFlag.AlignLeft)
 
         self.pipeline_comboBox = QComboBox(self.dockWidgetContents_2)
+        self.pipeline_comboBox.addItem("")
+        self.pipeline_comboBox.addItem("")
         self.pipeline_comboBox.setObjectName(u"pipeline_comboBox")
         sizePolicy.setHeightForWidth(self.pipeline_comboBox.sizePolicy().hasHeightForWidth())
         self.pipeline_comboBox.setSizePolicy(sizePolicy)
@@ -122,7 +120,13 @@ class Ui_PageEditor(object):
         PageEditor.setWindowTitle(QCoreApplication.translate("PageEditor", u"PageEditor", None))
         self.unit_view_dockWidget.setWindowTitle(QCoreApplication.translate("PageEditor", u"Unit view", None))
         self.label.setText(QCoreApplication.translate("PageEditor", u"Active manga:", None))
+        self.active_unit_comboBox.setItemText(0, QCoreApplication.translate("PageEditor", u"[Unit 1]", None))
+        self.active_unit_comboBox.setItemText(1, QCoreApplication.translate("PageEditor", u"[Unit 2]", None))
+
         self.item_settings_dockWidget.setWindowTitle(QCoreApplication.translate("PageEditor", u"Settings", None))
         self.label_2.setText(QCoreApplication.translate("PageEditor", u"Pipeline", None))
+        self.pipeline_comboBox.setItemText(0, QCoreApplication.translate("PageEditor", u"[Pipeline 1]", None))
+        self.pipeline_comboBox.setItemText(1, QCoreApplication.translate("PageEditor", u"[Pipeline 2]", None))
+
     # retranslateUi
 

@@ -16,11 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QGraphicsView" name="image_graphicsView"/>
-      </item>
-     </layout>
+     <layout class="QVBoxLayout" name="central_widget_verticalLayout"/>
     </item>
    </layout>
   </widget>
