@@ -34,6 +34,7 @@ class UnitManager:
     
 
     def _connect_to_events(self):
+        self.event_bus.state_persistance_manager_event_bus.writeStateRequested.connect(self.update_active_unit_metadata)
         self.event_bus.activeProjectChanged.connect(self._on_active_project_changed)
         self.event_bus.activeUnitUpdated.connect(self.update_active_unit_metadata)
     
